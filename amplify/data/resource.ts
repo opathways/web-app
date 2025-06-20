@@ -1,47 +1,17 @@
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
-/*== EMPLOYER DASHBOARD SCHEMA ==========================================
-This schema defines the data models for the Employer Dashboard MVP:
-- Company: Employer company profiles
-- Job: Job postings created by employers  
-- Application: Applications submitted by job seekers
-All models require EMPLOYER group authentication.
+/*== STEP 1 ===============================================================
+The section below creates a Todo database table with a "content" field. Try
+adding a new "isDone" field as a boolean. The authorization rule below
+specifies that any user authenticated via an API key can "create", "read",
+"update", and "delete" any "Todo" records.
 =========================================================================*/
 const schema = a.schema({
-  Company: a
+  Todo: a
     .model({
-      name: a.string().required(),
-      description: a.string(),
-      location: a.string(),
-      website: a.string(),
-      size: a.string(),
-      employerId: a.string().required(),
+      content: a.string(),
     })
-    .authorization((allow) => [allow.group("EMPLOYER")]),
-  
-  Job: a
-    .model({
-      title: a.string().required(),
-      description: a.string().required(),
-      requirements: a.string(),
-      status: a.enum(["ACTIVE", "INACTIVE", "DRAFT"]),
-      companyId: a.id().required(),
-      company: a.belongsTo("Company", "companyId"),
-    })
-    .authorization((allow) => [allow.group("EMPLOYER")]),
-    
-  Application: a
-    .model({
-      applicantName: a.string().required(),
-      applicantEmail: a.string().required(),
-      resume: a.string(),
-      coverLetter: a.string(),
-      status: a.enum(["NEW", "IN_REVIEW", "HIRED", "REJECTED"]),
-      jobId: a.id().required(),
-      job: a.belongsTo("Job", "jobId"),
-      appliedAt: a.datetime(),
-    })
-    .authorization((allow) => [allow.group("EMPLOYER")]),
+    .authorization((allow) => [allow.publicApiKey()]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
@@ -49,9 +19,9 @@ export type Schema = ClientSchema<typeof schema>;
 export const data = defineData({
   schema,
   authorizationModes: {
-    defaultAuthorizationMode: "userPool",
-    userPoolAuthorizationMode: {
-      userPoolId: "default",
+    defaultAuthorizationMode: "apiKey",
+    apiKeyAuthorizationMode: {
+      expiresInDays: 30,
     },
   },
 });

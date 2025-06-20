@@ -9,4 +9,4 @@ url_path,page_title,auth_required,role_guard,description
 /jobs/[id],Job Details,YES,EMPLOYER,Detail view for a specific job listing.
 /jobs/[id]/edit,Edit Job,YES,EMPLOYER,Edit form for a specific job listing.
 /jobs/[id]/applicants,Job Applicants,YES,EMPLOYER,View list of applicants for a job.
-/jobs/[id]/applicants/[applicantId],Applicant Details,YES,EMPLOYER,Detail view for a specific applicant.
+/jobs/[id]/applicants/[applicantId],Applicant Details,YES,EMPLOYER,View specific applicant details.

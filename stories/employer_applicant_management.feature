@@ -1,57 +1,32 @@
 Feature: Employer Applicant Management
-  As an employer user
-  I want to view and manage job applicants
-  So that I can efficiently review candidates and make hiring decisions
-
-  Background:
-    Given I am logged in as an employer user
-    And I have the "EMPLOYER" role in Cognito
-    And I have active job listings with applicants
+  As an Employer,
+  I want to review and respond to job applicants
+  So that I can efficiently manage the hiring process.
 
   Scenario: View applicants for a job listing
-    Given I have a job listing titled "Senior Software Engineer"
-    And the job has received 5 applications
-    When I navigate to the applicant management page for this job
-    Then I should see a list of all 5 applicants
-    And each applicant should display their name, application date, and status
-    And the default status for new applicants should be "NEW"
-    And I should be able to sort applicants by application date
-    And I should be able to filter applicants by status
+    Given I am logged in as an Employer user
+    And at least one of my job listings has received applications
+    When I view the applicant list for that job
+    Then I can see each applicant's name and application details
+    And each applicant's status is shown as "NEW" initially
 
-  Scenario: Update applicant status from NEW to IN-REVIEW
-    Given I have an applicant named "John Smith" with status "NEW"
-    When I click on the applicant's profile
-    And I review their resume and application materials
-    And I change their status to "IN-REVIEW"
-    And I add a note "Strong background, scheduling phone interview"
-    And I save the changes
-    Then the applicant's status should be updated to "IN-REVIEW"
-    And my note should be saved and visible in the applicant's profile
-    And I should see a success message "Applicant status updated successfully"
+  Scenario: Mark an applicant as In-Review
+    Given I am logged in as an Employer user
+    And an applicant for one of my jobs currently has status "NEW"
+    When I change the applicant's status to "IN-REVIEW"
+    Then the applicant's status is updated to "IN-REVIEW"
+    And the change is recorded in the system for that application
 
-  Scenario: Hire an applicant from IN-REVIEW status
-    Given I have an applicant named "Jane Doe" with status "IN-REVIEW"
-    When I navigate to her applicant profile
-    And I change her status to "HIRED"
-    And I add a note "Excellent interview, extending offer"
-    And I save the changes
-    Then her status should be updated to "HIRED"
-    And she should appear in the "Hired Candidates" section
-    And I should see a confirmation message "Candidate marked as hired"
+  Scenario: Reject an applicant
+    Given I am logged in as an Employer user
+    And an applicant for one of my jobs has status "IN-REVIEW"
+    When I mark the applicant as "REJECTED"
+    Then the applicant's status is updated to "REJECTED"
+    And the applicant is no longer under consideration for that job
 
-  Scenario: Reject an applicant with reason
-    Given I have an applicant named "Bob Johnson" with status "IN-REVIEW"
-    When I navigate to his applicant profile
-    And I change his status to "REJECTED"
-    And I add a note "Skills don't match current requirements"
-    And I save the changes
-    Then his status should be updated to "REJECTED"
-    And he should appear in the "Rejected Candidates" section
-    And I should see a confirmation message "Applicant status updated"
-
-  Scenario: Attempt to hire applicant directly from NEW status (edge case)
-    Given I have an applicant named "Alice Brown" with status "NEW"
-    When I attempt to change her status directly to "HIRED"
-    Then I should see a validation message "Must review applicant before hiring"
-    And the status should remain "NEW"
-    And I should be prompted to move to "IN-REVIEW" first
+  Scenario: Hire an applicant
+    Given I am logged in as an Employer user
+    And an applicant for one of my jobs has status "IN-REVIEW"
+    When I mark the applicant as "HIRED"
+    Then the applicant's status is updated to "HIRED"
+    And the candidate is recorded as hired for that position

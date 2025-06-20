@@ -1,0 +1,12 @@
+url_path,page_title,auth_required,role_guard,description
+/login,Login,NO,PUBLIC,Login page using Amplify Auth.
+/dashboard,Dashboard,YES,EMPLOYER,Employer's main dashboard overview.
+/company-profile/new,Create Company Profile,YES,EMPLOYER,Form to create company profile.
+/company-profile,Company Profile,YES,EMPLOYER,View employer's company profile.
+/company-profile/edit,Edit Company Profile,YES,EMPLOYER,Edit existing company profile.
+/jobs,Job Listings,YES,EMPLOYER,List all of the employer's job postings.
+/jobs/new,Create Job,YES,EMPLOYER,Form to create a new job listing.
+/jobs/[id],Job Details,YES,EMPLOYER,Detail view for a specific job listing.
+/jobs/[id]/edit,Edit Job,YES,EMPLOYER,Edit form for a specific job listing.
+/jobs/[id]/applicants,Job Applicants,YES,EMPLOYER,View list of applicants for a job.
+/jobs/[id]/applicants/[applicantId],Applicant Details,YES,EMPLOYER,View specific applicant details.

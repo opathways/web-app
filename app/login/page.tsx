@@ -14,17 +14,17 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <Authenticator>
-        {({ signOut, user }) => {
-          useEffect(() => {
-            if (user) {
-              router.push('/dashboard');
-            }
-          }, [user]);
-          
-          return null; // Will redirect to dashboard
-        }}
-      </Authenticator>
+     <Authenticator>
+  {({ signOut, user }) => {
+    useEffect(() => {
+      if (user) {
+        router.push('/dashboard');
+      }
+    }, [user]);
+
+    return <div className="text-sm text-gray-500">Redirecting...</div>;
+  }}
+</Authenticator>
     </div>
   );
 }

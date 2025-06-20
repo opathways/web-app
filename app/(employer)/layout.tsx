@@ -1,11 +1,10 @@
 "use client";
 
-import { useAuthenticator } from '@aws-amplify/ui-react';
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { fetchAuthSession } from "aws-amplify/auth";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Amplify } from 'aws-amplify';
 import outputs from '@/amplify_outputs.json';
-import '@aws-amplify/ui-react/styles.css';
 
 Amplify.configure(outputs);
 
@@ -32,35 +31,33 @@ export default function EmployerLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { user, signOut } = useAuthenticator();
   const router = useRouter();
+  const [authorized, setAuthorized] = useState(false);
 
   useEffect(() => {
-    if (!user) {
-      router.push('/login');
-      return;
-    }
+    const checkGroup = async () => {
+      try {
+        const { tokens } = await fetchAuthSession();
+        const groups = tokens?.idToken?.payload["cognito:groups"] || [];
+        if (groups.includes("EMPLOYER")) {
+          setAuthorized(true);
+        } else {
+          router.replace("/login");
+        }
+      } catch {
+        router.replace("/login");
+      }
+    };
 
-    const groups = user.signInUserSession?.accessToken?.payload['cognito:groups'] || [];
-    if (!groups.includes('EMPLOYER')) {
-      router.push('/access-denied');
-      return;
-    }
-  }, [user, router]);
+    checkGroup();
+  }, []);
 
-  if (!user) {
-    return <div>Loading...</div>;
-  }
+  if (!authorized) return null;
 
   return (
     <div className="flex">
       <Sidebar />
       <main className="flex-1 p-6">
-        <div className="mb-4">
-          <button onClick={signOut} className="bg-red-500 text-white px-4 py-2 rounded">
-            Sign Out
-          </button>
-        </div>
         {children}
       </main>
     </div>

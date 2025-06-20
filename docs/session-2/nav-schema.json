@@ -1,0 +1,17 @@
+[
+  {
+    "label": "Dashboard",
+    "path": "/dashboard",
+    "icon": "home"
+  },
+  {
+    "label": "Jobs",
+    "path": "/jobs",
+    "icon": "briefcase"
+  },
+  {
+    "label": "Company",
+    "path": "/company-profile",
+    "icon": "building"
+  }
+]

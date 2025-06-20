@@ -1,12 +1,12 @@
 url_path,page_title,auth_required,role_guard,description
-/login,Login,NO,PUBLIC,Authentication entry point with Amplify Auth UI for employer sign-in and sign-up flows
-/dashboard,Dashboard,YES,EMPLOYER,Main landing page with company overview and navigation hub for authenticated employers
-/company-profile/new,Create Company Profile,YES,EMPLOYER,Company profile creation form for first-time setup when no profile exists
-/company-profile,Company Profile,YES,EMPLOYER,Read-only view of current company profile information visible to applicants
-/company-profile/edit,Edit Company Profile,YES,EMPLOYER,Edit form for modifying existing company profile details and contact information
-/jobs,Job Listings,YES,EMPLOYER,Master list of all job postings with filtering and search capabilities
-/jobs/new,Create Job,YES,EMPLOYER,Comprehensive job creation form with validation and draft save functionality
-/jobs/[id],Job Details,YES,EMPLOYER,Detailed view of specific job posting with applicant summary and performance metrics
-/jobs/[id]/edit,Edit Job,YES,EMPLOYER,Edit form for modifying existing job posting details while preserving applicant data
-/jobs/[id]/applicants,Job Applicants,YES,EMPLOYER,List of all applicants for specific job with status filtering and bulk actions
-/jobs/[id]/applicants/[applicantId],Applicant Details,YES,EMPLOYER,Detailed applicant profile with status management and hiring pipeline controls
+/login,Login,NO,PUBLIC,Login/signup page using Amplify Auth UI
+/dashboard,Dashboard,YES,EMPLOYER,Main landing page after login. Overview of jobs and applicants
+/company-profile/new,Create Company Profile,YES,EMPLOYER,Form to create company profile (if none exists)
+/company-profile,Company Profile,YES,EMPLOYER,View employer's company profile
+/company-profile/edit,Edit Company Profile,YES,EMPLOYER,Edit existing company profile
+/jobs,My Jobs,YES,EMPLOYER,List of all job postings by employer
+/jobs/new,Post New Job,YES,EMPLOYER,Form to publish a new job listing
+/jobs/[id],Job Details,YES,EMPLOYER,Job detail view for specific posting
+/jobs/[id]/edit,Edit Job,YES,EMPLOYER,Edit form for an existing job
+/jobs/[id]/applicants,Job Applicants,YES,EMPLOYER,List of applicants for a specific job
+/jobs/[id]/applicants/[applicantId],Applicant Profile,YES,EMPLOYER,View/manage specific applicant and update status

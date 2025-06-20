@@ -2,6 +2,7 @@
 import { fetchAuthSession } from "aws-amplify/auth";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export default function EmployerLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -29,5 +30,20 @@ export default function EmployerLayout({ children }: { children: React.ReactNode
 
   if (!authorized) return null;
 
-  return <>{children}</>;
+  return (
+    <div className="flex">
+      {/* Sidebar Navigation */}
+      <aside className="w-60 p-4 bg-gray-50"> 
+        <nav>
+          <ul className="space-y-2">
+            <li><Link href="/dashboard">Dashboard</Link></li>
+            <li><Link href="/company-profile">Company Profile</Link></li>
+            <li><Link href="/jobs">Jobs</Link></li>
+          </ul>
+        </nav>
+      </aside>
+      {/* Main Content Area */}
+      <main className="flex-1 p-6">{children}</main>
+    </div>
+  );
 }

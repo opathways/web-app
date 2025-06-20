@@ -1,6 +1,6 @@
 # Information Architecture Map - Employer Frontend
 
-## Route Hierarchy and Access Levels
+## Route Hierarchy Diagram
 
 ```mermaid
 flowchart TB
@@ -8,27 +8,27 @@ flowchart TB
     login["/login\n(PUBLIC)"]
   end
 
-  subgraph Protected [Authenticated – EMPLOYER-Only]
+  subgraph Protected [Authenticated – EMPLOYER-Only Routes]
     dashboard["/dashboard"]
+    companyProfile["/company-profile"]
     companyNew["/company-profile/new"]
-    companyView["/company-profile"]
     companyEdit["/company-profile/edit"]
     jobs["/jobs"]
-    jobNew["/jobs/new"]
+    newJob["/jobs/new"]
     jobDetail["/jobs/[id]"]
-    jobEdit["/jobs/[id]/edit"]
-    applicants["/jobs/[id]/applicants"]
-    applicantDetail["/jobs/[id]/applicants/[applicantId]"]
+    editJob["/jobs/[id]/edit"]
+    applicantsList["/jobs/[id]/applicants"]
+    applicantProfile["/jobs/[id]/applicants/[applicantId]"]
 
-    dashboard --> companyView
-    dashboard --> jobs
-    companyView --> companyEdit
+    dashboard --> companyProfile
     dashboard --> companyNew
-    jobs --> jobNew
+    companyProfile --> companyEdit
+    dashboard --> jobs
+    jobs --> newJob
     jobs --> jobDetail
-    jobDetail --> jobEdit
-    jobDetail --> applicants
-    applicants --> applicantDetail
+    jobDetail --> editJob
+    jobDetail --> applicantsList
+    applicantsList --> applicantProfile
   end
 
   login --> dashboard

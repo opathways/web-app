@@ -1,5 +1,13 @@
 "use client";
 
+if (typeof window !== "undefined" && process.env.NODE_ENV !== "production") {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const ReactDOM = require("react-dom");
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const axe = require("@axe-core/react");
+  axe(require("react"), ReactDOM, 1000); // 1-second debounce
+}
+
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { fetchAuthSession } from "aws-amplify/auth";

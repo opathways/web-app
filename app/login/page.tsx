@@ -25,7 +25,10 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <Authenticator />
+      <main>
+        <h1>Login to Employer Portal</h1>
+        <Authenticator />
+      </main>
     </div>
   );
 }

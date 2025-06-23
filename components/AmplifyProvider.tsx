@@ -12,10 +12,16 @@ export default function AmplifyProvider({ children }: AmplifyProviderProps) {
   const [isConfigured, setIsConfigured] = useState(false);
 
   useEffect(() => {
-    const configureAmplify = () => {
+    const configureAmplify = async () => {
       try {
         if (typeof window !== 'undefined') {
-          console.warn("Running in local development mode - Amplify auto-configuration");
+          try {
+            const outputs = await import('@/amplify_outputs.json');
+            Amplify.configure(outputs.default);
+          } catch (importError) {
+            console.warn("amplify_outputs.json not found - running in development mode");
+            Amplify.configure({});
+          }
         }
         setIsConfigured(true);
       } catch (error) {

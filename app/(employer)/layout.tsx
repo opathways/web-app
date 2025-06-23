@@ -8,34 +8,10 @@ if (typeof window !== "undefined" && process.env.NODE_ENV !== "production") {
   axe(require("react"), ReactDOM, 1000); // 1-second debounce
 }
 
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { fetchAuthSession } from "aws-amplify/auth";
+import React from "react";
 import SidebarNav from "@/components/SidebarNav";
 
 export default function EmployerLayout({ children }: { children: React.ReactNode }) {
-  const router = useRouter();
-  const [authorized, setAuthorized] = useState(false);
-
-  useEffect(() => {
-    const checkGroup = async () => {
-      try {
-        const { tokens } = await fetchAuthSession();
-        const groups = tokens?.idToken?.payload["cognito:groups"] || [];
-        if (Array.isArray(groups) && groups.includes("EMPLOYER")) {
-          setAuthorized(true);
-        } else {
-          router.replace("/login");
-        }
-      } catch {
-        router.replace("/login");
-      }
-    };
-    checkGroup();
-  }, []);
-
-  if (!authorized) return null;            // don't flash protected UI
-
   return (
     <div className="flex min-h-screen bg-gray-50">
       {/* Sidebar — hidden on < md */}

@@ -1,8 +1,9 @@
 "use client";
-import { fetchAuthSession } from "aws-amplify/auth";
+
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import Link from "next/link";
+import { fetchAuthSession } from "aws-amplify/auth";
+import SidebarNav from "@/components/SidebarNav";
 
 export default function EmployerLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -12,10 +13,8 @@ export default function EmployerLayout({ children }: { children: React.ReactNode
     const checkGroup = async () => {
       try {
         const { tokens } = await fetchAuthSession();
-        const rawGroups = tokens?.idToken?.payload["cognito:groups"];
-        const groups = Array.isArray(rawGroups) ? rawGroups : [];
-
-        if (groups.includes("EMPLOYER")) {
+        const groups = tokens?.idToken?.payload["cognito:groups"] || [];
+        if (Array.isArray(groups) && groups.includes("EMPLOYER")) {
           setAuthorized(true);
         } else {
           router.replace("/login");
@@ -24,26 +23,21 @@ export default function EmployerLayout({ children }: { children: React.ReactNode
         router.replace("/login");
       }
     };
-
     checkGroup();
   }, []);
 
-  if (!authorized) return null;
+  if (!authorized) return null;            // don't flash protected UI
 
   return (
-    <div className="flex">
-      {/* Sidebar Navigation */}
-      <aside className="w-60 p-4 bg-gray-50"> 
-        <nav>
-          <ul className="space-y-2">
-            <li><Link href="/dashboard">Dashboard</Link></li>
-            <li><Link href="/company-profile">Company Profile</Link></li>
-            <li><Link href="/jobs">Jobs</Link></li>
-          </ul>
-        </nav>
-      </aside>
-      {/* Main Content Area */}
-      <main className="flex-1 p-6">{children}</main>
+    <div className="flex min-h-screen bg-gray-50">
+      {/* Sidebar — hidden on < md */}
+      <SidebarNav className="hidden md:block w-64 bg-white border-r border-gray-200" />
+
+      {/* Main frame */}
+      <div className="flex-1 flex flex-col">
+        {/* (Optional topbar placeholder) */}
+        <main className="p-6">{children}</main>
+      </div>
     </div>
   );
 }

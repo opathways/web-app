@@ -35,8 +35,11 @@ export default function EmployerLayout({ children }: { children: React.ReactNode
 
       {/* Main frame */}
       <div className="flex-1 flex flex-col">
-        {/* (Optional topbar placeholder) */}
-        <main className="p-6">{children}</main>
+        {/* Mobile header placeholder */}
+        <header className="md:hidden p-4 bg-white border-b text-sm font-medium">
+          Employer Portal
+        </header>
+        <main className="p-4 sm:p-6">{children}</main>
       </div>
     </div>
   );

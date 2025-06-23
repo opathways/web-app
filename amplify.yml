@@ -10,6 +10,14 @@ frontend:
     preBuild:
       commands:
         - npm ci
+        # 1️⃣ Generate the outputs file
+        - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
+        - echo "☑ backend deploy finished"
+        # 2️⃣ Fail fast if file missing
+        - if [ ! -f amplify_outputs.json ]; then echo '❌ amplify_outputs.json missing'; exit 1; fi
+        # 3️⃣ Copy so `@/amplify_outputs.json` resolves
+        - cp amplify_outputs.json ./app/
+        - echo "☑ outputs file copied to ./app/"
     build:
       commands:
         - npm run build

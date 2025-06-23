@@ -1,28 +1,38 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const links = [
-  { href: "/dashboard",       label: "Dashboard" },
-  { href: "/company-profile", label: "Company Profile" },
-  { href: "/jobs",            label: "Jobs" }
+export interface NavItem {
+  label: string;
+  href: string;
+}
+
+const navItems: NavItem[] = [
+  { label: "Dashboard",       href: "/dashboard" },
+  { label: "Company Profile", href: "/company-profile" },
+  { label: "Jobs",            href: "/jobs" }
 ];
 
-export default function SidebarNav({ className = "" }: { className?: string }) {
+export default function SidebarNav({
+  items = navItems,
+  className = ""
+}: {
+  items?: NavItem[];
+  className?: string;
+}) {
   const pathname = usePathname();
 
   return (
     <aside className={className}>
       <nav className="px-4 py-6">
         <ul className="space-y-1">
-          {links.map(l => {
-            const active = pathname === l.href;
+          {items.map(({ href, label }) => {
+            const active = pathname === href;
             return (
-              <li key={l.href}>
+              <li key={href}>
                 <Link
-                  href={l.href}
+                  href={href}
                   className={[
                     "block rounded-md px-3 py-2 text-sm font-medium transition",
                     active
@@ -30,7 +40,7 @@ export default function SidebarNav({ className = "" }: { className?: string }) {
                       : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
                   ].join(" ")}
                 >
-                  {l.label}
+                  {label}
                 </Link>
               </li>
             );

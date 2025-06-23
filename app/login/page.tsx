@@ -1,7 +1,8 @@
 "use client";
 
 import { Authenticator } from "@aws-amplify/ui-react";
-import { Amplify, Hub } from "aws-amplify";
+import { Amplify } from "aws-amplify";
+import { Hub } from "aws-amplify/utils";
 import outputs from "@/amplify_outputs.json";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";

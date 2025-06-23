@@ -17,10 +17,10 @@ export default function AmplifyProvider({ children }: AmplifyProviderProps) {
         if (typeof window !== 'undefined') {
           try {
             const outputs = await import('@/amplify_outputs.json');
-            Amplify.configure(outputs.default);
+            Amplify.configure(outputs.default, { ssr: true });
           } catch (importError) {
             console.warn("amplify_outputs.json not found - running in development mode");
-            Amplify.configure({});
+            Amplify.configure({}, { ssr: true });
           }
         }
         setIsConfigured(true);

@@ -12,21 +12,23 @@ Amplify.configure(outputs);
 export default function Login() {
   const router = useRouter();
 
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const session = await Amplify.Auth.currentSession();
+        const groups = session.getAccessToken().decodePayload()["cognito:groups"] || [];
+        if (groups.includes("EMPLOYER")) {
+          router.replace("/dashboard");
+        }
+      } catch {
+      }
+    };
+    checkAuth();
+  }, [router]);
+
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <Authenticator>
-        {({ user }) => {
-          useEffect(() => {
-            if (user) {
-              router.push("/dashboard");
-            }
-          }, [user]);
-
-          return (
-            <div className="text-sm text-gray-500">Redirecting...</div>
-          );
-        }}
-      </Authenticator>
+      <Authenticator />
     </div>
   );
 }

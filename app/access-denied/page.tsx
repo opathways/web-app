@@ -1,14 +1,18 @@
 "use client";
 
-import { Heading } from '@aws-amplify/ui-react';
+import { Heading, View, Text, Button } from "@aws-amplify/ui-react";
+import { useRouter } from "next/navigation";
 
 export default function AccessDenied() {
+  const router = useRouter();
+
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <View className="min-h-screen flex items-center justify-center">
       <div className="text-center">
         <Heading level={1}>Access Denied</Heading>
-        <p className="mt-4">You need EMPLOYER access to view this page.</p>
+        <Text>You need EMPLOYER privileges to access this application.</Text>
+        <Button onClick={() => router.push("/login")}>Back to Login</Button>
       </div>
-    </div>
+    </View>
   );
 }

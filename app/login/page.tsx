@@ -17,8 +17,11 @@ export default function Login() {
         const groups = tokens?.idToken?.payload["cognito:groups"] || [];
         if (Array.isArray(groups) && groups.includes("EMPLOYER")) {
           router.replace("/dashboard");
+        } else if (tokens?.accessToken) {
+          router.replace("/access-denied");
         }
-      } catch {
+      } catch (error) {
+        console.log("User not authenticated");
       }
     };
     checkAuth();

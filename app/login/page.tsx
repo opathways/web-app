@@ -23,7 +23,7 @@ export default function Login() {
           }, [user]);
 
           return (
-            <div className="text-sm text-gray-500">Login to Employer Portal</div>
+            <div className="text-sm text-gray-500">Redirecting...</div>
           );
         }}
       </Authenticator>

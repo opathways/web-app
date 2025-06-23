@@ -28,7 +28,7 @@ const schema = a.schema({
     .authorization((allow) => [
       allow.groups(["EMPLOYER"]).to(["create"]),
       allow.owner().to(["read", "update", "delete"]).identityClaim("sub"),
-      allow.authenticated().to(["read"]),
+      allow.private().to(["read"]),
       allow.groups(["ADMIN"]).to(["create", "read", "update", "delete"])
     ])
     .belongsTo("company", "companyID")

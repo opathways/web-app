@@ -1,0 +1,53 @@
+enum JobStatus {
+  OPEN
+  CLOSED
+}
+
+enum ApplicationStatus {
+  NEW
+  IN_REVIEW
+  REJECTED
+  HIRED
+}
+
+type CompanyProfile @model
+  @auth(rules: [
+    { allow: owner, ownerField: "owner", operations: [create, read, update, delete] },
+    { allow: groups, groups: ["ADMIN"], operations: [read, update, delete] }
+  ]) {
+  id: ID!
+  name: String!
+  owner: String!
+  jobs: [Job] @hasMany(indexName: "byCompany", fields: ["id"])
+}
+
+type Job @model
+  @auth(rules: [
+    { allow: groups, groups: ["EMPLOYER"], operations: [create] },
+    { allow: owner, ownerField: "owner", operations: [read, update, delete] },
+    { allow: private, operations: [read] },
+    { allow: groups, groups: ["ADMIN"], operations: [create, read, update, delete] }
+  ]) {
+  id: ID!
+  title: String!
+  description: String
+  status: JobStatus!
+  owner: String!
+  companyID: ID!
+  company: CompanyProfile @belongsTo(fields: ["companyID"])
+  applications: [Application] @hasMany(indexName: "byJob", fields: ["id"])
+}
+
+type Application @model
+  @auth(rules: [
+    { allow: owner, ownerField: "applicantId", operations: [create, read, delete] },
+    { allow: owner, ownerField: "jobOwnerId", operations: [read, update] },
+    { allow: groups, groups: ["ADMIN"], operations: [read, update, delete] }
+  ]) {
+  id: ID!
+  jobID: ID!
+  job: Job @belongsTo(fields: ["jobID"])
+  applicantId: String!
+  jobOwnerId: String!
+  status: ApplicationStatus!
+}

@@ -235,7 +235,7 @@ export default function JobDetail({ params }: { params: { id: string } }) {
           </Button>
           
           <Button
-            variation={job.status === "ACTIVE" ? "destructive" : "default"}
+            variation={job.status === "ACTIVE" ? "destructive" : "primary"}
             onClick={handleStatusToggle}
             isLoading={actionLoading}
             loadingText="Updating..."
@@ -317,7 +317,7 @@ export default function JobDetail({ params }: { params: { id: string } }) {
             
             <Flex direction="column" gap="0.75rem">
               <Button
-                variation="default"
+                variation="primary"
                 width="100%"
                 onClick={() => router.push(`/jobs/${job.id}/edit`)}
                 isDisabled={actionLoading}
@@ -326,7 +326,7 @@ export default function JobDetail({ params }: { params: { id: string } }) {
               </Button>
               
               <Button
-                variation={job.status === "ACTIVE" ? "destructive" : "default"}
+                variation={job.status === "ACTIVE" ? "destructive" : "primary"}
                 width="100%"
                 onClick={handleStatusToggle}
                 isLoading={actionLoading}

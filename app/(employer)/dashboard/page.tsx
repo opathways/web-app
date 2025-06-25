@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { generateClient } from "aws-amplify/data";
-import { Heading, View, Text, Button, Flex } from "@aws-amplify/ui-react";
 import { useRouter } from "next/navigation";
 import Card from "@/components/Card";
 import type { Schema } from "@/amplify/data/resource";
@@ -94,10 +93,14 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <View padding="1rem">
-        <Heading level={1}>Employer Dashboard</Heading>
-        <Text>Loading dashboard metrics...</Text>
-      </View>
+      <div className="min-h-screen bg-gray-50 p-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Employer Dashboard</h1>
+            <p className="text-gray-600">Loading dashboard metrics...</p>
+          </div>
+        </div>
+      </div>
     );
   }
 

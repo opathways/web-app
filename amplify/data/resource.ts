@@ -10,6 +10,8 @@ const schema = a.schema({
       location: a.string(),
       website: a.url(),
       contactEmail: a.email(),
+      size: a.string(),
+      founded: a.string(),
       jobListings: a.hasMany("JobListing", "companyID"),
     })
     .authorization((allow) => [

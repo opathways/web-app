@@ -1,17 +1,18 @@
 "use client";
 
+import { Heading, View, Text } from "@aws-amplify/ui-react";
 import FormSection from "@/components/FormSection";
 
 export default function EditCompanyProfile() {
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Edit Company Profile</h1>
-      <p className="text-gray-600 mb-4">TODO: Render Company Profile Edit Form</p>
+    <View padding="1rem">
+      <Heading level={1}>Edit Company Profile</Heading>
+      <Text>TODO: Render Company Profile Edit Form</Text>
       
       <FormSection title="Demo" description="Section description">
-        <p>Field A</p>
-        <p>Field B</p>
+        <Text>Field A</Text>
+        <Text>Field B</Text>
       </FormSection>
-    </div>
+    </View>
   );
 }

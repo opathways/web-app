@@ -1,3 +1,4 @@
+import { Heading, View, Text } from "@aws-amplify/ui-react";
 import Card from "@/components/Card";
 import { runWithAmplifyServerContext } from "@/utils/amplifyServerUtils";
 import { fetchDashboardMetrics } from "@/graphql/custom/dashboardStats";
@@ -25,9 +26,9 @@ export default async function DashboardPage() {
   }
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Employer Dashboard</h1>
-      <p className="text-gray-600 mb-4">Overview metrics and quick links for jobs & applicants</p>
+    <View padding="1rem">
+      <Heading level={1}>Employer Dashboard</Heading>
+      <Text>Overview metrics and quick links for jobs & applicants</Text>
       
       <div className="mt-4">
         <Card>
@@ -37,6 +38,6 @@ export default async function DashboardPage() {
           </pre>
         </Card>
       </div>
-    </div>
+    </View>
   );
 }

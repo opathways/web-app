@@ -298,6 +298,7 @@ export default function JobApplicants({ params }: { params: { id: string } }) {
                   label=""
                   checked={selectedApplicants.size === filteredApplicants.length && filteredApplicants.length > 0}
                   onChange={toggleSelectAll}
+                  name="selectAll"
                 />
               </TableCell>
               <TableCell>Name</TableCell>
@@ -316,6 +317,7 @@ export default function JobApplicants({ params }: { params: { id: string } }) {
                     label=""
                     checked={selectedApplicants.has(applicant.id)}
                     onChange={() => toggleApplicantSelection(applicant.id)}
+                    name={`select-${applicant.id}`}
                   />
                 </TableCell>
                 <TableCell>

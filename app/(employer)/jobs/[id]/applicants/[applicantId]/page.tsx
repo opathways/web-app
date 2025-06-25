@@ -178,7 +178,7 @@ export default function ApplicantProfile({
           <Card padding="1.5rem" marginBottom="1.5rem">
             <Heading level={3} marginBottom="1rem">Personal Information</Heading>
             
-            <Grid templateColumns="1fr 1fr" gap="1rem" marginBottom="1rem">
+            <Grid templateColumns="1fr 1fr" gap="1rem">
               <View>
                 <Text fontSize="0.875rem" fontWeight="semibold" color="gray.700">
                   Full Name
@@ -197,115 +197,36 @@ export default function ApplicantProfile({
                 </Text>
               </View>
             </Grid>
-
-            <Grid templateColumns="1fr 1fr" gap="1rem">
-              <View>
-                <Text fontSize="0.875rem" fontWeight="semibold" color="gray.700">
-                  Phone Number
-                </Text>
-                <Text fontSize="1rem" marginBottom="0.5rem">
-                  {applicant.phoneNumber || "Not provided"}
-                </Text>
-              </View>
-              
-              <View>
-                <Text fontSize="0.875rem" fontWeight="semibold" color="gray.700">
-                  Location
-                </Text>
-                <Text fontSize="1rem" marginBottom="0.5rem">
-                  {applicant.location || "Not provided"}
-                </Text>
-              </View>
-            </Grid>
           </Card>
 
           <Card padding="1.5rem" marginBottom="1.5rem">
             <Heading level={3} marginBottom="1rem">Application Materials</Heading>
             
-            <Grid templateColumns="1fr 1fr" gap="1rem" marginBottom="1rem">
-              <View>
-                <Text fontSize="0.875rem" fontWeight="semibold" color="gray.700">
-                  Resume/CV
-                </Text>
-                {applicant.resumeURL ? (
-                  <Button
-                    variation="link"
-                    as="a"
-                    href={applicant.resumeURL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    fontSize="1rem"
-                    padding="0"
-                  >
-                    Download Resume
-                  </Button>
-                ) : (
-                  <Text fontSize="1rem" color="gray.500">
-                    No resume uploaded
-                  </Text>
-                )}
-              </View>
-              
-              <View>
-                <Text fontSize="0.875rem" fontWeight="semibold" color="gray.700">
-                  Portfolio/Website
-                </Text>
-                {applicant.portfolioURL ? (
-                  <Button
-                    variation="link"
-                    as="a"
-                    href={applicant.portfolioURL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    fontSize="1rem"
-                    padding="0"
-                  >
-                    View Portfolio
-                  </Button>
-                ) : (
-                  <Text fontSize="1rem" color="gray.500">
-                    No portfolio provided
-                  </Text>
-                )}
-              </View>
-            </Grid>
-
-            {applicant.coverLetter && (
-              <View>
-                <Text fontSize="0.875rem" fontWeight="semibold" color="gray.700" marginBottom="0.5rem">
-                  Cover Letter
-                </Text>
-                <View 
-                  backgroundColor="gray.50" 
-                  padding="1rem" 
-                  borderRadius="0.5rem"
-                  maxHeight="200px"
-                  overflow="auto"
+            <View>
+              <Text fontSize="0.875rem" fontWeight="semibold" color="gray.700">
+                Resume/CV
+              </Text>
+              {applicant.resumeURL ? (
+                <Button
+                  variation="link"
+                  as="a"
+                  href={applicant.resumeURL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  fontSize="1rem"
+                  padding="0"
                 >
-                  <Text fontSize="0.875rem" whiteSpace="pre-wrap">
-                    {applicant.coverLetter}
-                  </Text>
-                </View>
-              </View>
-            )}
+                  Download Resume
+                </Button>
+              ) : (
+                <Text fontSize="1rem" color="gray.500">
+                  No resume uploaded
+                </Text>
+              )}
+            </View>
           </Card>
 
-          {applicant.experience && (
-            <Card padding="1.5rem" marginBottom="1.5rem">
-              <Heading level={3} marginBottom="1rem">Experience & Qualifications</Heading>
-              <View 
-                backgroundColor="gray.50" 
-                padding="1rem" 
-                borderRadius="0.5rem"
-                maxHeight="200px"
-                overflow="auto"
-              >
-                <Text fontSize="0.875rem" whiteSpace="pre-wrap">
-                  {applicant.experience}
-                </Text>
-              </View>
-            </Card>
-          )}
+
         </View>
 
         <View>
@@ -386,7 +307,7 @@ export default function ApplicantProfile({
                     </Text>
                   </Flex>
                   <Text fontSize="0.75rem" color="gray.500" marginLeft="1rem">
-                    {formatDate(applicant.updatedAt)}
+                    Status last updated
                   </Text>
                 </>
               )}

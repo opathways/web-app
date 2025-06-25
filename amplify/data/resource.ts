@@ -1,17 +1,64 @@
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
-/*== STEP 1 ===============================================================
-The section below creates a Todo database table with a "content" field. Try
-adding a new "isDone" field as a boolean. The authorization rule below
-specifies that any user authenticated via an API key can "create", "read",
-"update", and "delete" any "Todo" records.
-=========================================================================*/
 const schema = a.schema({
-  Todo: a
+  CompanyProfile: a
     .model({
-      content: a.string(),
+      owner: a.string().required(),
+      name: a.string().required(),
+      description: a.string(),
+      industry: a.string(),
+      location: a.string(),
+      website: a.url(),
+      contactEmail: a.email(),
+      jobListings: a.hasMany("JobListing", "companyID"),
     })
-    .authorization((allow) => [allow.publicApiKey()]),
+    .authorization((allow) => [
+      allow.groups(["EMPLOYER"]),
+      allow.owner().to(["read", "create", "update"])
+    ])
+    .secondaryIndexes((index) => [
+      index("owner").name("byOwner").queryField("companyProfilesByOwner")
+    ]),
+
+  JobListing: a
+    .model({
+      owner: a.string().required(),
+      title: a.string().required(),
+      description: a.string().required(),
+      status: a.enum(["DRAFT", "ACTIVE", "CLOSED"]),
+      postedAt: a.datetime(),
+      companyID: a.id().required(),
+      company: a.belongsTo("CompanyProfile", "companyID"),
+      applications: a.hasMany("JobApplication", "jobID"),
+    })
+    .authorization((allow) => [
+      allow.groups(["EMPLOYER"]),
+      allow.owner().to(["read", "create", "update"])
+    ])
+    .secondaryIndexes((index) => [
+      index("owner").name("byOwner").queryField("jobListingsByOwner"),
+      index("companyID").name("byCompanyProfile")
+    ]),
+
+  JobApplication: a
+    .model({
+      owner: a.string().required(),
+      jobID: a.id().required(),
+      job: a.belongsTo("JobListing", "jobID"),
+      applicantName: a.string(),
+      applicantEmail: a.email(),
+      resumeURL: a.url(),
+      status: a.enum(["NEW", "IN_REVIEW", "HIRED", "REJECTED"]),
+      appliedAt: a.datetime(),
+    })
+    .authorization((allow) => [
+      allow.groups(["EMPLOYER"]),
+      allow.owner().to(["read", "create", "update"])
+    ])
+    .secondaryIndexes((index) => [
+      index("owner").name("byOwner").queryField("jobApplicationsByOwner"),
+      index("jobID").name("byJobListing")
+    ]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
@@ -19,10 +66,7 @@ export type Schema = ClientSchema<typeof schema>;
 export const data = defineData({
   schema,
   authorizationModes: {
-    defaultAuthorizationMode: "apiKey",
-    apiKeyAuthorizationMode: {
-      expiresInDays: 30,
-    },
+    defaultAuthorizationMode: "userPool",
   },
 });
 

@@ -1,11 +1,13 @@
-export const dynamic = 'force-dynamic';
+"use client";
 
+import { useState, useEffect } from "react";
 import { generateClient } from "aws-amplify/data";
-import { Heading, View, Text, Flex } from "@aws-amplify/ui-react";
+import { Heading, View, Text, Button, Flex } from "@aws-amplify/ui-react";
+import { useRouter } from "next/navigation";
 import Card from "@/components/Card";
 import type { Schema } from "@/amplify/data/resource";
-import { runWithAmplifyServerContext } from "@/utils/amplifyServerUtils";
-import DashboardActions from "@/components/DashboardActions";
+
+const client = generateClient<Schema>();
 
 interface DashboardMetrics {
   totalJobs: number;
@@ -21,59 +23,82 @@ interface DashboardMetrics {
   companyProfileExists: boolean;
 }
 
-export default async function DashboardPage() {
-  let metrics: DashboardMetrics | null = null;
-  
-  try {
-    metrics = await runWithAmplifyServerContext({
-      operation: async (contextSpec) => {
-        const client = generateClient<Schema>(contextSpec);
-        
-        const { data: companyProfiles } = await client.models.CompanyProfile.list();
-        const companyProfile = companyProfiles?.[0];
-        
-        const { data: jobListings } = await client.models.JobListing.list();
-        
-        const { data: jobApplications } = await client.models.JobApplication.list();
-        
-        const totalJobs = jobListings?.length || 0;
-        const activeJobs = jobListings?.filter(job => job.status === "ACTIVE")?.length || 0;
-        const totalApplicants = jobApplications?.length || 0;
-        
-        const statusBreakdown = {
-          new: jobApplications?.filter(app => app.status === "NEW")?.length || 0,
-          inReview: jobApplications?.filter(app => app.status === "IN_REVIEW")?.length || 0,
-          hired: jobApplications?.filter(app => app.status === "HIRED")?.length || 0,
-          rejected: jobApplications?.filter(app => app.status === "REJECTED")?.length || 0,
-        };
-        
-        const companyProfileExists = !!companyProfile;
-        const profileComplete = companyProfileExists && 
-          !!companyProfile.name && 
-          !!companyProfile.description && 
-          !!companyProfile.industry && 
-          !!companyProfile.location;
-        
-        return {
-          totalJobs,
-          activeJobs,
-          totalApplicants,
-          statusBreakdown,
-          profileComplete,
-          companyProfileExists
-        };
-      }
-    });
-  } catch (error) {
-    console.error("Error fetching dashboard metrics:", error);
-    metrics = {
-      totalJobs: 0,
-      activeJobs: 0,
-      totalApplicants: 0,
-      statusBreakdown: { new: 0, inReview: 0, hired: 0, rejected: 0 },
-      profileComplete: false,
-      companyProfileExists: false
-    };
+export default function DashboardPage() {
+  const router = useRouter();
+  const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const fetchDashboardMetrics = async () => {
+    try {
+      setLoading(true);
+      
+      const { data: companyProfiles } = await client.models.CompanyProfile.list();
+      const companyProfile = companyProfiles?.[0];
+      
+      const { data: jobListings } = await client.models.JobListing.list();
+      
+      const { data: jobApplications } = await client.models.JobApplication.list();
+      
+      const totalJobs = jobListings?.length || 0;
+      const activeJobs = jobListings?.filter(job => job.status === "ACTIVE")?.length || 0;
+      const totalApplicants = jobApplications?.length || 0;
+      
+      const statusBreakdown = {
+        new: jobApplications?.filter(app => app.status === "NEW")?.length || 0,
+        inReview: jobApplications?.filter(app => app.status === "IN_REVIEW")?.length || 0,
+        hired: jobApplications?.filter(app => app.status === "HIRED")?.length || 0,
+        rejected: jobApplications?.filter(app => app.status === "REJECTED")?.length || 0,
+      };
+      
+      const companyProfileExists = !!companyProfile;
+      const profileComplete = companyProfileExists && 
+        !!companyProfile.name && 
+        !!companyProfile.description && 
+        !!companyProfile.industry && 
+        !!companyProfile.location;
+      
+      setMetrics({
+        totalJobs,
+        activeJobs,
+        totalApplicants,
+        statusBreakdown,
+        profileComplete,
+        companyProfileExists
+      });
+    } catch (error) {
+      console.error("Error fetching dashboard metrics:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchDashboardMetrics();
+  }, []);
+
+  const handlePostNewJob = () => {
+    router.push("/jobs/new");
+  };
+
+  const handleViewApplicants = () => {
+    router.push("/jobs");
+  };
+
+  const handleEditProfile = () => {
+    if (metrics?.companyProfileExists) {
+      router.push("/company-profile/edit");
+    } else {
+      router.push("/company-profile/new");
+    }
+  };
+
+  if (loading) {
+    return (
+      <View padding="1rem">
+        <Heading level={1}>Employer Dashboard</Heading>
+        <Text>Loading dashboard metrics...</Text>
+      </View>
+    );
   }
 
   return (
@@ -159,10 +184,30 @@ export default async function DashboardPage() {
       {/* Quick Action Buttons */}
       <Card>
         <Heading level={3} marginBottom="1rem">Quick Actions</Heading>
-        <DashboardActions 
-          companyProfileExists={metrics?.companyProfileExists || false}
-          profileComplete={metrics?.profileComplete || false}
-        />
+        <Flex direction="row" gap="1rem" wrap="wrap">
+          <Button 
+            variation="primary" 
+            size="large"
+            onClick={handlePostNewJob}
+          >
+            📝 Post a New Job
+          </Button>
+          
+          <Button 
+            size="large"
+            onClick={handleViewApplicants}
+          >
+            👥 View Applicants
+          </Button>
+          
+          <Button 
+            variation={metrics?.profileComplete ? "link" : "primary"} 
+            size="large"
+            onClick={handleEditProfile}
+          >
+            {metrics?.companyProfileExists ? "✏️ Edit Profile" : "🏢 Create Profile"}
+          </Button>
+        </Flex>
       </Card>
     </View>
   );

@@ -194,7 +194,6 @@ export default function DashboardPage() {
           </Button>
           
           <Button 
-            variation="default" 
             size="large"
             onClick={handleViewApplicants}
           >
@@ -202,7 +201,7 @@ export default function DashboardPage() {
           </Button>
           
           <Button 
-            variation={metrics?.profileComplete ? "default" : "primary"} 
+            variation={metrics?.profileComplete ? "link" : "primary"} 
             size="large"
             onClick={handleEditProfile}
           >

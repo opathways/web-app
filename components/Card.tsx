@@ -1,12 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
-
-export interface CardProps {
-  children: ReactNode;
-  className?: string;
-  [key: string]: any;
-}
+import { Card as AmplifyCard, CardProps } from "@aws-amplify/ui-react";
 
 /**
  * Re-skinned Amplify Card that applies our Tailwind tokens:
@@ -17,7 +11,7 @@ export interface CardProps {
  */
 export default function Card({ children, className = "", ...rest }: CardProps) {
   return (
-    <div
+    <AmplifyCard
       className={[
         "bg-white rounded-lg shadow-subtle p-4",
         className
@@ -25,6 +19,6 @@ export default function Card({ children, className = "", ...rest }: CardProps) {
       {...rest}
     >
       {children}
-    </div>
+    </AmplifyCard>
   );
 }

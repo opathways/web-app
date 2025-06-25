@@ -24,8 +24,8 @@ export default function SidebarNav({
   const pathname = usePathname();
 
   return (
-    <aside className={`bg-gray-50 border-r border-gray-200 ${className}`}>
-      <nav className="px-3 py-6">
+    <aside className={className}>
+      <nav className="px-4 py-6">
         <ul className="space-y-1">
           {items.map(({ href, label }) => {
             const active = pathname === href;
@@ -34,10 +34,10 @@ export default function SidebarNav({
                 <Link
                   href={href}
                   className={[
-                    "flex items-center rounded-lg px-3 py-2.5 text-sm font-medium transition-colors duration-200",
+                    "block rounded-md px-3 py-2 text-sm font-medium transition",
                     active
-                      ? "bg-primary/10 text-primary-700 border-l-2 border-primary"
-                      : "text-gray-600 hover:bg-gray-100 hover:text-gray-800"
+                      ? "bg-gray-100 text-gray-900"
+                      : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
                   ].join(" ")}
                 >
                   {label}

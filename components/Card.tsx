@@ -3,18 +3,17 @@
 import { Card as AmplifyCard, CardProps } from "@aws-amplify/ui-react";
 
 /**
- * Design system aligned Card component:
- *   • White surface with proper elevation
- *   • Rounded corners per design system
- *   • Consistent padding and shadows
- *   • Follows OpenAI-style minimalist aesthetic
+ * Re-skinned Amplify Card that applies our Tailwind tokens:
+ *   • bg-white surface
+ *   • rounded-lg corners
+ *   • shadow-subtle (defined in tailwind.config.js)
+ *   • p-4 default padding
  */
 export default function Card({ children, className = "", ...rest }: CardProps) {
   return (
     <AmplifyCard
       className={[
-        "bg-white rounded-lg shadow-card border border-gray-200/50",
-        "p-6 transition-shadow duration-200 hover:shadow-lg",
+        "bg-white rounded-lg shadow-subtle p-4",
         className
       ].join(" ")}
       {...rest}

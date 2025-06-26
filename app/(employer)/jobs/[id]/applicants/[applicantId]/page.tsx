@@ -97,14 +97,20 @@ export default function ApplicantProfile({
     }
   };
 
-  const getStatusBadgeVariation = (status: ApplicationStatus) => {
-    switch (status) {
-      case "NEW": return "info";
-      case "IN_REVIEW": return "warning";
-      case "HIRED": return "success";
-      case "REJECTED": return "error";
-      default: return "info";
-    }
+  const getStatusBadge = (status: ApplicationStatus) => {
+    const statusConfig = {
+      NEW: { className: "bg-info-100 text-info-700", text: "NEW" },
+      IN_REVIEW: { className: "bg-warning-100 text-warning-700", text: "IN REVIEW" },
+      HIRED: { className: "bg-success-100 text-success-700", text: "HIRED" },
+      REJECTED: { className: "bg-danger-100 text-danger-700", text: "REJECTED" }
+    };
+    
+    const config = statusConfig[status] || statusConfig.NEW;
+    return (
+      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.className}`}>
+        {config.text}
+      </span>
+    );
   };
 
   const formatDate = (dateString: string | null | undefined) => {
@@ -120,199 +126,244 @@ export default function ApplicantProfile({
 
   if (loading) {
     return (
-      <View padding="1rem">
-        <Heading level={1}>Applicant Details</Heading>
-        <Text>Loading applicant information...</Text>
-      </View>
+      <div className="p-4">
+        <h1 className="text-3xl font-bold text-gray-800 mb-2">Applicant Details</h1>
+        <p className="text-gray-600">Loading applicant information...</p>
+      </div>
     );
   }
 
   if (error || !applicant) {
     return (
-      <View padding="1rem">
-        <Heading level={1}>Applicant Details</Heading>
-        <Alert variation="error" marginBottom="1rem">
-          {error || "Applicant not found."}
-        </Alert>
-        <Button
-          variation="link"
+      <div className="p-4">
+        <h1 className="text-3xl font-bold text-gray-800 mb-2">Applicant Details</h1>
+        <div className="bg-danger-50 border border-danger-200 rounded-lg p-6 mb-6">
+          <p className="text-danger-600">{error || "Applicant not found."}</p>
+        </div>
+        <button
+          className="text-gray-600 hover:text-gray-800 font-medium transition-colors duration-150"
           onClick={() => router.back()}
         >
           ← Back to Applicants List
-        </Button>
-      </View>
+        </button>
+      </div>
     );
   }
 
   return (
-    <View padding="1rem">
-      <Flex direction="row" alignItems="center" justifyContent="space-between" marginBottom="1rem">
-        <View>
-          <Heading level={1}>Applicant Details</Heading>
+    <div className="p-4">
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">Applicant Details</h1>
           {job && (
-            <Text color="gray.600" fontSize="1.125rem">
+            <p className="text-lg text-gray-600">
               {job.title}
-            </Text>
+            </p>
           )}
-          <Text color="gray.500" fontSize="0.875rem">
+          <p className="text-sm text-gray-500">
             Application submitted {formatDate(applicant.appliedAt)}
-          </Text>
-        </View>
-        <Flex direction="row" gap="0.5rem">
+          </p>
+        </div>
+        <div className="flex gap-2">
           <Link href={`/jobs/${params.id}/applicants`}>
-            <Button variation="link">
+            <button className="text-gray-600 hover:text-gray-800 font-medium transition-colors duration-150">
               ← Back to Applicants List
-            </Button>
+            </button>
           </Link>
-        </Flex>
-      </Flex>
+        </div>
+      </div>
 
       {error && (
-        <Alert variation="error" marginBottom="1rem">
-          {error}
-        </Alert>
+        <div className="bg-danger-50 border border-danger-200 rounded-lg p-4 mb-6">
+          <p className="text-danger-600">{error}</p>
+        </div>
       )}
 
-      <Grid templateColumns="1fr 300px" gap="1.5rem">
-        <View>
-          <Card padding="1.5rem" marginBottom="1.5rem">
-            <Heading level={3} marginBottom="1rem">Personal Information</Heading>
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className="lg:col-span-3">
+          <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6 shadow-sm">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Personal Information</h3>
             
-            <Grid templateColumns="1fr 1fr" gap="1rem">
-              <View>
-                <Text fontSize="0.875rem" fontWeight="semibold" color="gray.700">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <p className="text-sm font-semibold text-gray-700">
                   Full Name
-                </Text>
-                <Text fontSize="1rem" marginBottom="0.5rem">
+                </p>
+                <p className="text-base text-gray-800 mb-2">
                   {applicant.applicantName || "N/A"}
-                </Text>
-              </View>
+                </p>
+              </div>
               
-              <View>
-                <Text fontSize="0.875rem" fontWeight="semibold" color="gray.700">
+              <div>
+                <p className="text-sm font-semibold text-gray-700">
                   Email Address
-                </Text>
-                <Text fontSize="1rem" marginBottom="0.5rem">
+                </p>
+                <p className="text-base text-gray-800 mb-2">
                   {applicant.applicantEmail || "N/A"}
-                </Text>
-              </View>
-            </Grid>
-          </Card>
+                </p>
+              </div>
+            </div>
 
-          <Card padding="1.5rem" marginBottom="1.5rem">
-            <Heading level={3} marginBottom="1rem">Application Materials</Heading>
-            
-            <View>
-              <Text fontSize="0.875rem" fontWeight="semibold" color="gray.700">
-                Resume/CV
-              </Text>
-              {applicant.resumeURL ? (
-                <Button
-                  variation="link"
-                  as="a"
-                  href={applicant.resumeURL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  fontSize="1rem"
-                  padding="0"
-                >
-                  Download Resume
-                </Button>
-              ) : (
-                <Text fontSize="1rem" color="gray.500">
-                  No resume uploaded
-                </Text>
-              )}
-            </View>
-          </Card>
-        </View>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <p className="text-sm font-semibold text-gray-700">
+                  Phone Number
+                </p>
+                <p className="text-base text-gray-800 mb-2">
+                  {applicant.phoneNumber || "Not provided"}
+                </p>
+              </div>
+              
+              <div>
+                <p className="text-sm font-semibold text-gray-700">
+                  Location
+                </p>
+                <p className="text-base text-gray-800 mb-2">
+                  {applicant.location || "Not provided"}
+                </p>
+              </div>
+            </div>
+          </div>
 
-        <View>
-          <Card padding="1.5rem" marginBottom="1.5rem">
-            <Heading level={3} marginBottom="1rem">Application Status</Heading>
+          <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6 shadow-sm">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Application Materials</h3>
             
-            <View marginBottom="1rem">
-              <Text fontSize="0.875rem" fontWeight="semibold" color="gray.700" marginBottom="0.5rem">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <p className="text-sm font-semibold text-gray-700">
+                  Resume/CV
+                </p>
+                {applicant.resumeURL ? (
+                  <a
+                    className="text-primary hover:text-primary-600 text-base font-medium transition-colors duration-150"
+                    href={applicant.resumeURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Download Resume
+                  </a>
+                ) : (
+                  <p className="text-base text-gray-500">
+                    No resume uploaded
+                  </p>
+                )}
+              </div>
+              
+              <div>
+                <p className="text-sm font-semibold text-gray-700">
+                  Portfolio/Website
+                </p>
+                {applicant.portfolioURL ? (
+                  <a
+                    className="text-primary hover:text-primary-600 text-base font-medium transition-colors duration-150"
+                    href={applicant.portfolioURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    View Portfolio
+                  </a>
+                ) : (
+                  <p className="text-base text-gray-500">
+                    No portfolio provided
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {applicant.coverLetter && (
+              <div>
+                <p className="text-sm font-semibold text-gray-700 mb-2">
+                  Cover Letter
+                </p>
+                <div className="bg-gray-50 p-4 rounded-lg max-h-48 overflow-auto">
+                  <p className="text-sm whitespace-pre-wrap text-gray-800">
+                    {applicant.coverLetter}
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {applicant.experience && (
+            <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6 shadow-sm">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Experience & Qualifications</h3>
+              <div className="bg-gray-50 p-4 rounded-lg max-h-48 overflow-auto">
+                <p className="text-sm whitespace-pre-wrap text-gray-800">
+                  {applicant.experience}
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="lg:col-span-1">
+          <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6 shadow-sm">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Application Status</h3>
+            
+            <div className="mb-4">
+              <p className="text-sm font-semibold text-gray-700 mb-2">
                 Current Status
-              </Text>
-              <Badge 
-                variation={getStatusBadgeVariation(applicant.status as ApplicationStatus)}
-                fontSize="1rem"
-                padding="0.5rem 1rem"
-              >
-                {applicant.status?.replace('_', ' ') || "NEW"}
-              </Badge>
-            </View>
+              </p>
+              {getStatusBadge(applicant.status as ApplicationStatus)}
+            </div>
 
-            <Divider marginBottom="1rem" />
+            <hr className="border-gray-200 mb-4" />
 
-            <View>
-              <Text fontSize="0.875rem" fontWeight="semibold" color="gray.700" marginBottom="0.5rem">
+            <div>
+              <p className="text-sm font-semibold text-gray-700 mb-2">
                 Update Status
-              </Text>
-              <SelectField
-                label=""
+              </p>
+              <select
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                 value={applicant.status || "NEW"}
                 onChange={(e) => updateApplicantStatus(e.target.value as ApplicationStatus)}
-                isDisabled={statusUpdateLoading}
+                disabled={statusUpdateLoading}
               >
                 <option value="NEW">New</option>
                 <option value="IN_REVIEW">In Review</option>
                 <option value="HIRED">Hired</option>
                 <option value="REJECTED">Rejected</option>
-              </SelectField>
+              </select>
               
               {statusUpdateLoading && (
-                <Text fontSize="0.75rem" color="gray.500" marginTop="0.5rem">
+                <p className="text-xs text-gray-500 mt-2">
                   Updating status...
-                </Text>
+                </p>
               )}
-            </View>
-          </Card>
+            </div>
+          </div>
 
-          <Card padding="1.5rem">
-            <Heading level={3} marginBottom="1rem">Application Timeline</Heading>
+          <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Application Timeline</h3>
             
-            <View>
-              <Flex direction="row" alignItems="center" marginBottom="0.5rem">
-                <View 
-                  width="8px" 
-                  height="8px" 
-                  borderRadius="50%" 
-                  backgroundColor="blue.500" 
-                  marginRight="0.5rem"
-                />
-                <Text fontSize="0.875rem" fontWeight="semibold">
+            <div>
+              <div className="flex items-center mb-2">
+                <div className="w-2 h-2 rounded-full bg-primary mr-2"></div>
+                <p className="text-sm font-semibold text-gray-800">
                   Application Submitted
-                </Text>
-              </Flex>
-              <Text fontSize="0.75rem" color="gray.500" marginLeft="1rem" marginBottom="1rem">
+                </p>
+              </div>
+              <p className="text-xs text-gray-500 ml-4 mb-4">
                 {formatDate(applicant.appliedAt)}
-              </Text>
+              </p>
 
               {applicant.status !== "NEW" && (
                 <>
-                  <Flex direction="row" alignItems="center" marginBottom="0.5rem">
-                    <View 
-                      width="8px" 
-                      height="8px" 
-                      borderRadius="50%" 
-                      backgroundColor="orange.500" 
-                      marginRight="0.5rem"
-                    />
-                    <Text fontSize="0.875rem" fontWeight="semibold">
+                  <div className="flex items-center mb-2">
+                    <div className="w-2 h-2 rounded-full bg-warning mr-2"></div>
+                    <p className="text-sm font-semibold text-gray-800">
                       Status Updated
-                    </Text>
-                  </Flex>
-                  <Text fontSize="0.75rem" color="gray.500" marginLeft="1rem">
-                    Status last updated
-                  </Text>
+                    </p>
+                  </div>
+                  <p className="text-xs text-gray-500 ml-4">
+                    {formatDate(applicant.updatedAt)}
+                  </p>
                 </>
               )}
-            </View>
-          </Card>
-        </View>
-      </Grid>
-    </View>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

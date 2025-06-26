@@ -117,16 +117,16 @@ export default function Jobs() {
 
   const getStatusBadge = (status: JobStatus) => {
     const statusConfig = {
-      ACTIVE: { variation: "success" as const, text: "Active" },
-      CLOSED: { variation: "error" as const, text: "Closed" },
-      DRAFT: { variation: "warning" as const, text: "Draft" }
+      ACTIVE: { className: "bg-success-100 text-success-700", text: "Active" },
+      CLOSED: { className: "bg-danger-100 text-danger-700", text: "Closed" },
+      DRAFT: { className: "bg-warning-100 text-warning-700", text: "Draft" }
     };
     
     const config = statusConfig[status] || statusConfig.DRAFT;
     return (
-      <Badge variation={config.variation} size="small">
+      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.className}`}>
         {config.text}
-      </Badge>
+      </span>
     );
   };
 
@@ -144,175 +144,193 @@ export default function Jobs() {
 
   if (loading) {
     return (
-      <View padding="1rem">
-        <Heading level={1}>Job Listings</Heading>
-        <Text>Loading job listings...</Text>
-      </View>
+      <div className="p-4">
+        <h1 className="text-3xl font-bold text-gray-800 mb-6">Job Listings</h1>
+        <p className="text-gray-600">Loading job listings...</p>
+      </div>
     );
   }
 
   return (
-    <View padding="1rem">
-      <Flex direction="row" justifyContent="space-between" alignItems="center" marginBottom="1.5rem">
-        <View>
-          <Heading level={1}>Job Listings</Heading>
-          <Text color="gray.600">
+    <div className="p-4">
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">Job Listings</h1>
+          <p className="text-gray-600">
             Manage all your job postings in one place. {jobs.length} total jobs.
-          </Text>
-        </View>
-        <Button 
-          variation="primary" 
-          size="large"
+          </p>
+        </div>
+        <button 
+          className="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
           onClick={() => router.push("/jobs/new")}
         >
           + Post New Job
-        </Button>
-      </Flex>
+        </button>
+      </div>
 
       {error && (
-        <View 
-          backgroundColor="red.50" 
-          padding="1rem" 
-          borderRadius="0.5rem" 
-          marginBottom="1rem"
-          border="1px solid"
-          borderColor="red.200"
-        >
-          <Text color="red.700">{error}</Text>
-        </View>
+        <div className="bg-danger-50 border border-danger-200 rounded-lg p-4 mb-4">
+          <p className="text-danger-600">{error}</p>
+        </div>
       )}
 
       {/* Search and Filter Controls */}
       <Card className="mb-6">
-        <Flex direction="row" gap="1rem" wrap="wrap" alignItems="end">
-          <View flex="1" minWidth="250px">
-            <SearchField
-              label="Search jobs"
-              placeholder="Search by title or description..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              onClear={() => setSearchTerm("")}
-            />
-          </View>
+        <div className="flex flex-wrap gap-4 items-end">
+          <div className="flex-1 min-w-[250px]">
+            <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-2">
+              Search jobs
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                id="search"
+                placeholder="Search by title or description..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full px-3 py-2 pl-10 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+              />
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm("")}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                >
+                  <svg className="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
+            </div>
+          </div>
           
-          <View minWidth="150px">
-            <SelectField
-              label="Filter by status"
+          <div className="min-w-[150px]">
+            <label htmlFor="status-filter" className="block text-sm font-medium text-gray-700 mb-2">
+              Filter by status
+            </label>
+            <select
+              id="status-filter"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
             >
               <option value="ALL">All Status</option>
               <option value="ACTIVE">Active</option>
               <option value="CLOSED">Closed</option>
               <option value="DRAFT">Draft</option>
-            </SelectField>
-          </View>
+            </select>
+          </div>
           
-          <View minWidth="150px">
-            <SelectField
-              label="Sort by"
+          <div className="min-w-[150px]">
+            <label htmlFor="sort-by" className="block text-sm font-medium text-gray-700 mb-2">
+              Sort by
+            </label>
+            <select
+              id="sort-by"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
             >
               <option value="newest">Newest First</option>
               <option value="oldest">Oldest First</option>
               <option value="title">Title A-Z</option>
               <option value="applications">Most Applications</option>
-            </SelectField>
-          </View>
-        </Flex>
+            </select>
+          </div>
+        </div>
       </Card>
 
       {/* Job Listings */}
       {filteredJobs.length === 0 ? (
         <Card>
-          <View textAlign="center" padding="2rem">
-            <Text fontSize="1.125rem" fontWeight="semibold" marginBottom="0.5rem">
+          <div className="text-center py-8">
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">
               {jobs.length === 0 ? "No jobs posted yet" : "No jobs match your filters"}
-            </Text>
-            <Text color="gray.600" marginBottom="1rem">
+            </h3>
+            <p className="text-gray-600 mb-4">
               {jobs.length === 0 
                 ? "Get started by posting your first job listing." 
                 : "Try adjusting your search or filter criteria."}
-            </Text>
+            </p>
             {jobs.length === 0 && (
-              <Button 
-                variation="primary"
+              <button 
+                className="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                 onClick={() => router.push("/jobs/new")}
               >
                 Post Your First Job
-              </Button>
+              </button>
             )}
-          </View>
+          </div>
         </Card>
       ) : (
-        <View>
+        <div>
           {filteredJobs.map((job) => (
             <Card key={job.id} className="mb-4">
-              <Flex direction="row" justifyContent="space-between" alignItems="start" gap="1rem">
-                <View flex="1">
-                  <Flex direction="row" alignItems="center" gap="0.75rem" marginBottom="0.5rem">
-                    <Heading level={3} margin="0">
+              <div className="flex justify-between items-start gap-4">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-2">
+                    <h3 className="text-xl font-semibold text-gray-800 m-0">
                       {job.title}
-                    </Heading>
+                    </h3>
                     {getStatusBadge(job.status as JobStatus)}
-                  </Flex>
+                  </div>
                   
-                  <Text color="gray.600" marginBottom="0.75rem" lineHeight="1.5">
+                  <p className="text-gray-600 mb-3 leading-relaxed">
                     {getJobSummary(job.description)}
-                  </Text>
+                  </p>
                   
-                  <Flex direction="row" gap="1.5rem" alignItems="center" marginBottom="1rem">
-                    <Text fontSize="0.875rem" color="gray.500">
+                  <div className="flex gap-6 items-center mb-4">
+                    <span className="text-sm text-gray-500">
                       Posted: {formatDate(job.postedAt)}
-                    </Text>
-                    <Text fontSize="0.875rem" color="gray.500">
+                    </span>
+                    <span className="text-sm text-gray-500">
                       Applications: {job.applicationCount}
-                    </Text>
-                  </Flex>
-                </View>
+                    </span>
+                  </div>
+                </div>
                 
-                <Flex direction="column" gap="0.5rem" minWidth="200px">
-                  <Button
-                    size="small"
+                <div className="flex flex-col gap-2 min-w-[200px]">
+                  <button
+                    className="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg font-medium hover:bg-gray-200 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
                     onClick={() => router.push(`/jobs/${job.id}`)}
                   >
                     View Details
-                  </Button>
+                  </button>
                   
-                  <Button
-                    variation="link"
-                    size="small"
+                  <button
+                    className="px-4 py-2 text-primary hover:text-primary-600 hover:bg-primary-50 rounded-lg font-medium transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                     onClick={() => router.push(`/jobs/${job.id}/edit`)}
                   >
                     Edit Job
-                  </Button>
+                  </button>
                   
                   {job.status !== "DRAFT" && (
-                    <Button
-                      variation="link"
-                      size="small"
+                    <button
+                      className="px-4 py-2 text-primary hover:text-primary-600 hover:bg-primary-50 rounded-lg font-medium transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                       onClick={() => handleStatusToggle(job.id, job.status as JobStatus)}
                     >
                       {job.status === "ACTIVE" ? "Close Job" : "Reopen Job"}
-                    </Button>
+                    </button>
                   )}
                   
                   {job.applicationCount > 0 && (
-                    <Button
-                      variation="link"
-                      size="small"
+                    <button
+                      className="px-4 py-2 text-primary hover:text-primary-600 hover:bg-primary-50 rounded-lg font-medium transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                       onClick={() => router.push(`/jobs/${job.id}/applicants`)}
                     >
                       View Applicants ({job.applicationCount})
-                    </Button>
+                    </button>
                   )}
-                </Flex>
-              </Flex>
+                </div>
+              </div>
             </Card>
           ))}
-        </View>
+        </div>
       )}
-    </View>
+    </div>
   );
 }

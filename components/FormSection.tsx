@@ -1,6 +1,5 @@
 "use client";
 
-import { Heading, View } from "@aws-amplify/ui-react";
 import { ReactNode } from "react";
 
 export interface FormSectionProps {
@@ -18,15 +17,15 @@ export default function FormSection({
 }: FormSectionProps) {
   return (
     <section className={["mb-8", className].join(" ")}>
-      <Heading level={5} className="mb-2 text-gray-800">
+      <h3 className="mb-2 text-lg font-semibold text-gray-800">
         {title}
-      </Heading>
+      </h3>
 
       {description && (
-        <p className="mb-4 text-sm text-gray-600">{description}</p>
+        <p className="mb-6 text-sm text-gray-600 leading-relaxed">{description}</p>
       )}
 
-      <View className="space-y-4">{children}</View>
+      <div className="space-y-6">{children}</div>
     </section>
   );
 }

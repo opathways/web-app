@@ -5,6 +5,7 @@ import { generateClient } from "aws-amplify/data";
 import { useRouter } from "next/navigation";
 import { Heading, View, Text, Button, Flex } from "@aws-amplify/ui-react";
 import Card from "@/components/Card";
+import { BuildingIcon, EditIcon, LocationIcon, MailIcon, GlobeIcon, CheckIcon, XIcon, WarningIcon } from "@/components/icons";
 import type { Schema } from "@/amplify/data/resource";
 
 const client = generateClient<Schema>();
@@ -66,7 +67,7 @@ export default function CompanyProfile() {
         <Card className="border-l-4 border-l-danger bg-danger-50">
           <p className="text-danger-600 mb-4">{error}</p>
           <button 
-            className="bg-primary text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            className="bg-primary text-white font-medium px-4 py-2 rounded-md hover:bg-primary/90 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
             onClick={fetchCompanyProfile}
           >
             Try Again
@@ -88,7 +89,7 @@ export default function CompanyProfile() {
           <Card className="text-center py-12">
             <div className="mb-6">
               <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl text-gray-400">🏢</span>
+                <BuildingIcon size={32} className="text-gray-400" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
                 No Company Profile Found
@@ -97,7 +98,7 @@ export default function CompanyProfile() {
                 You haven't created a company profile yet. Set up your profile to start posting jobs and attracting candidates.
               </p>
               <button 
-                className="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                className="bg-primary text-white font-medium px-4 py-2 rounded-md hover:bg-primary/90 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
                 onClick={handleCreateProfile}
               >
                 Create Company Profile
@@ -118,10 +119,11 @@ export default function CompanyProfile() {
             <p className="text-gray-600">View your company profile information and details.</p>
           </div>
           <button 
-            className="bg-primary text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            className="bg-primary text-white font-medium px-4 py-2 rounded-md hover:bg-primary/90 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary flex items-center gap-2"
             onClick={handleEditProfile}
           >
-            ✏️ Edit Profile
+            <EditIcon size={16} />
+            Edit Profile
           </button>
         </div>
 
@@ -153,7 +155,7 @@ export default function CompanyProfile() {
                 <div>
                   <h4 className="text-sm font-medium text-gray-700 mb-2">Location</h4>
                   <div className="flex items-center text-gray-900">
-                    <span className="mr-2">📍</span>
+                    <LocationIcon size={16} className="mr-2 text-gray-600" />
                     {profile.location}
                   </div>
                 </div>
@@ -172,7 +174,7 @@ export default function CompanyProfile() {
                 <div>
                   <h4 className="text-sm font-medium text-gray-700 mb-2">Contact Email</h4>
                   <div className="flex items-center">
-                    <span className="mr-2">✉️</span>
+                    <MailIcon size={16} className="mr-2 text-gray-600" />
                     <a 
                       href={`mailto:${profile.contactEmail}`}
                       className="text-primary hover:text-primary-600 hover:underline transition-colors duration-150"
@@ -187,7 +189,7 @@ export default function CompanyProfile() {
                 <div>
                   <h4 className="text-sm font-medium text-gray-700 mb-2">Website</h4>
                   <div className="flex items-center">
-                    <span className="mr-2">🌐</span>
+                    <GlobeIcon size={16} className="mr-2 text-gray-600" />
                     <a 
                       href={profile.website}
                       target="_blank"
@@ -211,38 +213,98 @@ export default function CompanyProfile() {
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">Company Name</span>
-                <span className={`text-sm font-medium ${profile.name ? 'text-success' : 'text-danger'}`}>
-                  {profile.name ? '✓ Complete' : '✗ Missing'}
+                <span className={`text-sm font-medium flex items-center gap-1 ${profile.name ? 'text-success' : 'text-danger'}`}>
+                  {profile.name ? (
+                    <>
+                      <CheckIcon size={14} />
+                      Complete
+                    </>
+                  ) : (
+                    <>
+                      <XIcon size={14} />
+                      Missing
+                    </>
+                  )}
                 </span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">Description</span>
-                <span className={`text-sm font-medium ${profile.description ? 'text-success' : 'text-warning'}`}>
-                  {profile.description ? '✓ Complete' : '⚠ Optional'}
+                <span className={`text-sm font-medium flex items-center gap-1 ${profile.description ? 'text-success' : 'text-warning'}`}>
+                  {profile.description ? (
+                    <>
+                      <CheckIcon size={14} />
+                      Complete
+                    </>
+                  ) : (
+                    <>
+                      <WarningIcon size={14} />
+                      Optional
+                    </>
+                  )}
                 </span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">Industry</span>
-                <span className={`text-sm font-medium ${profile.industry ? 'text-success' : 'text-warning'}`}>
-                  {profile.industry ? '✓ Complete' : '⚠ Optional'}
+                <span className={`text-sm font-medium flex items-center gap-1 ${profile.industry ? 'text-success' : 'text-warning'}`}>
+                  {profile.industry ? (
+                    <>
+                      <CheckIcon size={14} />
+                      Complete
+                    </>
+                  ) : (
+                    <>
+                      <WarningIcon size={14} />
+                      Optional
+                    </>
+                  )}
                 </span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">Location</span>
-                <span className={`text-sm font-medium ${profile.location ? 'text-success' : 'text-warning'}`}>
-                  {profile.location ? '✓ Complete' : '⚠ Optional'}
+                <span className={`text-sm font-medium flex items-center gap-1 ${profile.location ? 'text-success' : 'text-warning'}`}>
+                  {profile.location ? (
+                    <>
+                      <CheckIcon size={14} />
+                      Complete
+                    </>
+                  ) : (
+                    <>
+                      <WarningIcon size={14} />
+                      Optional
+                    </>
+                  )}
                 </span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">Contact Email</span>
-                <span className={`text-sm font-medium ${profile.contactEmail ? 'text-success' : 'text-danger'}`}>
-                  {profile.contactEmail ? '✓ Complete' : '✗ Missing'}
+                <span className={`text-sm font-medium flex items-center gap-1 ${profile.contactEmail ? 'text-success' : 'text-danger'}`}>
+                  {profile.contactEmail ? (
+                    <>
+                      <CheckIcon size={14} />
+                      Complete
+                    </>
+                  ) : (
+                    <>
+                      <XIcon size={14} />
+                      Missing
+                    </>
+                  )}
                 </span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">Website</span>
-                <span className={`text-sm font-medium ${profile.website ? 'text-success' : 'text-warning'}`}>
-                  {profile.website ? '✓ Complete' : '⚠ Optional'}
+                <span className={`text-sm font-medium flex items-center gap-1 ${profile.website ? 'text-success' : 'text-warning'}`}>
+                  {profile.website ? (
+                    <>
+                      <CheckIcon size={14} />
+                      Complete
+                    </>
+                  ) : (
+                    <>
+                      <WarningIcon size={14} />
+                      Optional
+                    </>
+                  )}
                 </span>
               </div>
             </div>

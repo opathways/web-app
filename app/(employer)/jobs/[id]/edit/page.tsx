@@ -15,6 +15,7 @@ import {
 } from "@aws-amplify/ui-react";
 import { useRouter } from "next/navigation";
 import FormSection from "@/components/FormSection";
+import { XIcon, CheckIcon } from "@/components/icons";
 import type { Schema } from "@/amplify/data/resource";
 
 const client = generateClient<Schema>();
@@ -153,14 +154,14 @@ export default function EditJob({ params }: { params: { id: string } }) {
       <div className="p-4">
         <div className="bg-danger-50 border border-danger-200 rounded-lg p-6">
           <div className="flex items-center">
-            <span className="text-danger text-2xl mr-3">❌</span>
+            <XIcon size={24} className="text-danger mr-3" />
             <div>
               <h3 className="text-lg font-semibold text-danger-700 mb-1">Error Loading Job</h3>
               <p className="text-danger-600">{error}</p>
             </div>
           </div>
           <button 
-            className="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 mt-4"
+            className="bg-primary text-white font-medium px-4 py-2 rounded-md hover:bg-primary/90 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary mt-4"
             onClick={() => router.push("/jobs")}
           >
             Back to Jobs
@@ -175,7 +176,7 @@ export default function EditJob({ params }: { params: { id: string } }) {
       <div className="p-4">
         <div className="bg-success-50 border border-success-200 rounded-lg p-6">
           <div className="flex items-center">
-            <span className="text-success text-2xl mr-3">✅</span>
+            <CheckIcon size={24} className="text-success mr-3" />
             <div>
               <h3 className="text-lg font-semibold text-success-700 mb-1">Job Updated Successfully!</h3>
               <p className="text-success-600">Your job posting has been updated. Redirecting to job details...</p>
@@ -196,7 +197,7 @@ export default function EditJob({ params }: { params: { id: string } }) {
       {error && (
         <div className="bg-danger-50 border border-danger-200 rounded-lg p-4 mb-6">
           <div className="flex items-center">
-            <span className="text-danger text-xl mr-3">❌</span>
+            <XIcon size={20} className="text-danger mr-3" />
             <p className="text-danger-600">{error}</p>
           </div>
         </div>
@@ -265,7 +266,7 @@ export default function EditJob({ params }: { params: { id: string } }) {
         <div className="flex gap-4 mt-8 flex-wrap">
           <button
             type="submit"
-            className="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-primary text-white font-medium px-4 py-2 rounded-md hover:bg-primary/90 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={loading}
           >
             {loading ? "Updating Job..." : "Update Job"}
@@ -273,7 +274,7 @@ export default function EditJob({ params }: { params: { id: string } }) {
 
           <button
             type="button"
-            className="text-gray-600 hover:text-gray-800 px-6 py-3 rounded-lg font-medium transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:opacity-50"
+            className="text-primary font-medium hover:underline px-4 py-2 rounded-md transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:opacity-50"
             onClick={handleCancel}
             disabled={loading}
           >
@@ -282,7 +283,7 @@ export default function EditJob({ params }: { params: { id: string } }) {
 
           <button
             type="button"
-            className="bg-danger text-white px-6 py-3 rounded-lg font-medium hover:bg-danger-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-danger focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-danger text-white font-medium px-4 py-2 rounded-md hover:bg-danger/90 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-danger disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleDelete}
             disabled={loading}
           >

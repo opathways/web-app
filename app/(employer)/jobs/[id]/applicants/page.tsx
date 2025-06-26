@@ -159,20 +159,14 @@ export default function JobApplicants({ params }: { params: { id: string } }) {
     }
   };
 
-  const getStatusBadge = (status: ApplicationStatus) => {
-    const statusConfig = {
-      NEW: { className: "bg-info-100 text-info-700", text: "NEW" },
-      IN_REVIEW: { className: "bg-warning-100 text-warning-700", text: "IN REVIEW" },
-      HIRED: { className: "bg-success-100 text-success-700", text: "HIRED" },
-      REJECTED: { className: "bg-danger-100 text-danger-700", text: "REJECTED" }
-    };
-    
-    const config = statusConfig[status] || statusConfig.NEW;
-    return (
-      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.className}`}>
-        {config.text}
-      </span>
-    );
+  const getStatusBadgeVariation = (status: ApplicationStatus) => {
+    switch (status) {
+      case "NEW": return "info";
+      case "IN_REVIEW": return "warning";
+      case "HIRED": return "success";
+      case "REJECTED": return "error";
+      default: return "info";
+    }
   };
 
   const formatDate = (dateString: string | null | undefined) => {
@@ -182,40 +176,40 @@ export default function JobApplicants({ params }: { params: { id: string } }) {
 
   if (loading) {
     return (
-      <div className="p-4">
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">Job Applicants</h1>
-        <p className="text-gray-600">Loading applicants...</p>
-      </div>
+      <View padding="1rem">
+        <Heading level={1}>Job Applicants</Heading>
+        <Text>Loading applicants...</Text>
+      </View>
     );
   }
 
   return (
     <View padding="1rem">
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Job Applicants</h1>
+      <Flex direction="row" alignItems="center" justifyContent="space-between" marginBottom="1rem">
+        <View>
+          <Heading level={1}>Job Applicants</Heading>
           {jobTitle && (
-            <p className="text-lg text-gray-600">
+            <Text color="gray.600" fontSize="1.125rem">
               {jobTitle}
-            </p>
+            </Text>
           )}
-          <p className="text-sm text-gray-500">
+          <Text color="gray.500" fontSize="0.875rem">
             {filteredApplicants.length} applicant{filteredApplicants.length !== 1 ? 's' : ''}
             {statusFilter !== "ALL" && ` (${statusFilter.toLowerCase().replace('_', ' ')})`}
-          </p>
-        </div>
-        <button
-          className="text-gray-600 hover:text-gray-800 font-medium transition-colors duration-150"
+          </Text>
+        </View>
+        <Button
+          variation="link"
           onClick={() => router.back()}
         >
           ← Back to Job Details
-        </button>
-      </div>
+        </Button>
+      </Flex>
 
       {error && (
-        <div className="bg-danger-50 border border-danger-200 rounded-lg p-4 mb-6">
-          <p className="text-danger-600">{error}</p>
-        </div>
+        <Alert variation="error" marginBottom="1rem">
+          {error}
+        </Alert>
       )}
 
       <Flex direction="row" gap="1rem" marginBottom="1rem" wrap="wrap">
@@ -242,47 +236,59 @@ export default function JobApplicants({ params }: { params: { id: string } }) {
       </Flex>
 
       {selectedApplicants.size > 0 && (
-        <div className="bg-info-50 border border-info-200 rounded-lg p-4 mb-6">
-          <div className="flex items-center gap-4 flex-wrap">
-            <p className="font-semibold text-gray-800">
+        <View 
+          backgroundColor="blue.50" 
+          padding="1rem" 
+          borderRadius="0.5rem" 
+          marginBottom="1rem"
+        >
+          <Flex direction="row" alignItems="center" gap="1rem" wrap="wrap">
+            <Text fontWeight="semibold">
               {selectedApplicants.size} applicant{selectedApplicants.size !== 1 ? 's' : ''} selected
-            </p>
-            <button
-              className="bg-gray-100 text-gray-800 px-3 py-1.5 rounded-md text-sm font-medium hover:bg-gray-200 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:opacity-50"
+            </Text>
+            <Button
+              size="small"
               onClick={() => handleBulkStatusUpdate("IN_REVIEW")}
-              disabled={bulkUpdateLoading}
+              isLoading={bulkUpdateLoading}
             >
-              {bulkUpdateLoading ? "Updating..." : "Mark as In Review"}
-            </button>
-            <button
-              className="bg-primary text-white px-3 py-1.5 rounded-md text-sm font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50"
+              Mark as In Review
+            </Button>
+            <Button
+              size="small"
+              variation="primary"
               onClick={() => handleBulkStatusUpdate("HIRED")}
-              disabled={bulkUpdateLoading}
+              isLoading={bulkUpdateLoading}
             >
-              {bulkUpdateLoading ? "Updating..." : "Mark as Hired"}
-            </button>
-            <button
-              className="bg-danger text-white px-3 py-1.5 rounded-md text-sm font-medium hover:bg-danger-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-danger focus:ring-offset-2 disabled:opacity-50"
+              Mark as Hired
+            </Button>
+            <Button
+              size="small"
+              variation="destructive"
               onClick={() => handleBulkStatusUpdate("REJECTED")}
-              disabled={bulkUpdateLoading}
+              isLoading={bulkUpdateLoading}
             >
-              {bulkUpdateLoading ? "Updating..." : "Mark as Rejected"}
-            </button>
-          </div>
-        </div>
+              Mark as Rejected
+            </Button>
+          </Flex>
+        </View>
       )}
 
       {filteredApplicants.length === 0 ? (
-        <div className="bg-gray-50 p-8 rounded-lg text-center">
-          <h3 className="text-lg font-semibold text-gray-800 mb-2">
+        <View 
+          backgroundColor="gray.50" 
+          padding="2rem" 
+          borderRadius="0.5rem"
+          textAlign="center"
+        >
+          <Text fontSize="1.125rem" fontWeight="semibold" marginBottom="0.5rem">
             No Applicants Found
-          </h3>
-          <p className="text-gray-600">
+          </Text>
+          <Text color="gray.600">
             {statusFilter === "ALL" 
               ? "No one has applied to this job yet." 
               : `No applicants with status "${statusFilter.toLowerCase().replace('_', ' ')}" found.`}
-          </p>
-        </div>
+          </Text>
+        </View>
       ) : (
         <Table>
           <TableHead>
@@ -319,36 +325,40 @@ export default function JobApplicants({ params }: { params: { id: string } }) {
                     href={`/jobs/${params.id}/applicants/${applicant.id}`}
                     style={{ textDecoration: 'none', color: 'inherit' }}
                   >
-                    <span className="font-semibold text-primary hover:text-primary-600 transition-colors duration-150">
+                    <Text fontWeight="semibold" color="blue.600">
                       {applicant.applicantName || "N/A"}
-                    </span>
+                    </Text>
                   </Link>
                 </TableCell>
                 <TableCell>
-                  <span className="text-sm text-gray-800">
+                  <Text fontSize="0.875rem">
                     {applicant.applicantEmail || "N/A"}
-                  </span>
+                  </Text>
                 </TableCell>
                 <TableCell>
-                  <span className="text-sm text-gray-800">
+                  <Text fontSize="0.875rem">
                     {formatDate(applicant.appliedAt)}
-                  </span>
+                  </Text>
                 </TableCell>
                 <TableCell>
-                  {getStatusBadge(applicant.status as ApplicationStatus)}
+                  <Badge variation={getStatusBadgeVariation(applicant.status as ApplicationStatus)}>
+                    {applicant.status?.replace('_', ' ') || "NEW"}
+                  </Badge>
                 </TableCell>
                 <TableCell>
                   {applicant.resumeURL ? (
-                    <a
-                      className="text-primary hover:text-primary-600 text-sm font-medium transition-colors duration-150"
+                    <Button
+                      size="small"
+                      variation="link"
+                      as="a"
                       href={applicant.resumeURL}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
                       Download
-                    </a>
+                    </Button>
                   ) : (
-                    <span className="text-sm text-gray-500">No resume</span>
+                    <Text fontSize="0.875rem" color="gray.500">No resume</Text>
                   )}
                 </TableCell>
                 <TableCell>

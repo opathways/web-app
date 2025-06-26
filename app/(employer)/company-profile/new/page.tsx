@@ -209,8 +209,8 @@ export default function NewCompanyProfile() {
           </FormSection>
 
           {error && (
-            <div className="mb-6 p-4 bg-danger-50 border border-danger-200 rounded-md">
-              <p className="text-sm text-danger-600">{error}</p>
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">
+              <p className="text-sm text-red-600">{error}</p>
             </div>
           )}
 
@@ -225,7 +225,7 @@ export default function NewCompanyProfile() {
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-2 bg-primary text-white rounded-md hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? "Creating..." : "Create Profile"}
             </button>

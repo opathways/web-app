@@ -152,29 +152,29 @@ export default function EditCompanyProfile() {
             </p>
           </div>
           
-          <div className="bg-danger-50 border border-danger-200 rounded-md p-6">
+          <div className="bg-red-50 border border-red-200 rounded-md p-6">
             <div className="flex">
               <div className="flex-shrink-0">
-                <svg className="h-5 w-5 text-danger-400" viewBox="0 0 20 20" fill="currentColor">
+                <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                 </svg>
               </div>
               <div className="ml-3">
-                <h3 className="text-sm font-medium text-danger-700">Error Loading Profile</h3>
-                <div className="mt-2 text-sm text-danger-600">
+                <h3 className="text-sm font-medium text-red-800">Error Loading Profile</h3>
+                <div className="mt-2 text-sm text-red-700">
                   <p>{error}</p>
                 </div>
                 <div className="mt-4">
                   <div className="flex space-x-2">
                     <button
                       onClick={fetchCompanyProfile}
-                      className="bg-danger-100 px-3 py-2 rounded-md text-sm font-medium text-danger-700 hover:bg-danger-200 focus:outline-none focus:ring-2 focus:ring-danger focus:ring-offset-2"
+                      className="bg-red-100 px-3 py-2 rounded-md text-sm font-medium text-red-800 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                     >
                       Try Again
                     </button>
                     <button
                       onClick={() => router.push("/company-profile/new")}
-                      className="bg-danger-100 px-3 py-2 rounded-md text-sm font-medium text-danger-700 hover:bg-danger-200 focus:outline-none focus:ring-2 focus:ring-danger focus:ring-offset-2"
+                      className="bg-red-100 px-3 py-2 rounded-md text-sm font-medium text-red-800 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                     >
                       Create Profile
                     </button>
@@ -309,8 +309,8 @@ export default function EditCompanyProfile() {
           </FormSection>
 
           {error && profileId && (
-            <div className="mb-6 p-4 bg-danger-50 border border-danger-200 rounded-md">
-              <p className="text-sm text-danger-600">{error}</p>
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">
+              <p className="text-sm text-red-600">{error}</p>
             </div>
           )}
 
@@ -325,7 +325,7 @@ export default function EditCompanyProfile() {
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-2 bg-primary text-white rounded-md hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? "Updating..." : "Update Profile"}
             </button>

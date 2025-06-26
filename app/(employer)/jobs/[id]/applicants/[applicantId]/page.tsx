@@ -210,7 +210,7 @@ export default function ApplicantProfile({
                   Phone Number
                 </p>
                 <p className="text-base text-gray-800 mb-2">
-                  {applicant.phoneNumber || "Not provided"}
+                  {(applicant as any).phoneNumber || "Not provided"}
                 </p>
               </div>
               
@@ -219,7 +219,7 @@ export default function ApplicantProfile({
                   Location
                 </p>
                 <p className="text-base text-gray-800 mb-2">
-                  {applicant.location || "Not provided"}
+                  {(applicant as any).location || "Not provided"}
                 </p>
               </div>
             </div>
@@ -253,10 +253,10 @@ export default function ApplicantProfile({
                 <p className="text-sm font-semibold text-gray-700">
                   Portfolio/Website
                 </p>
-                {applicant.portfolioURL ? (
+                {(applicant as any).portfolioURL ? (
                   <a
                     className="text-primary hover:text-primary-600 text-base font-medium transition-colors duration-150"
-                    href={applicant.portfolioURL}
+                    href={(applicant as any).portfolioURL}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -270,26 +270,26 @@ export default function ApplicantProfile({
               </div>
             </div>
 
-            {applicant.coverLetter && (
+            {(applicant as any).coverLetter && (
               <div>
                 <p className="text-sm font-semibold text-gray-700 mb-2">
                   Cover Letter
                 </p>
                 <div className="bg-gray-50 p-4 rounded-lg max-h-48 overflow-auto">
                   <p className="text-sm whitespace-pre-wrap text-gray-800">
-                    {applicant.coverLetter}
+                    {(applicant as any).coverLetter}
                   </p>
                 </div>
               </div>
             )}
           </div>
 
-          {applicant.experience && (
+          {(applicant as any).experience && (
             <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6 shadow-sm">
               <h3 className="text-lg font-semibold text-gray-800 mb-4">Experience & Qualifications</h3>
               <div className="bg-gray-50 p-4 rounded-lg max-h-48 overflow-auto">
                 <p className="text-sm whitespace-pre-wrap text-gray-800">
-                  {applicant.experience}
+                  {(applicant as any).experience}
                 </p>
               </div>
             </div>

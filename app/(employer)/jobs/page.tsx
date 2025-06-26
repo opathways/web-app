@@ -117,16 +117,16 @@ export default function Jobs() {
 
   const getStatusBadge = (status: JobStatus) => {
     const statusConfig = {
-      ACTIVE: { variation: "success" as const, text: "Active" },
-      CLOSED: { variation: "error" as const, text: "Closed" },
-      DRAFT: { variation: "warning" as const, text: "Draft" }
+      ACTIVE: { className: "bg-success-100 text-success-700", text: "Active" },
+      CLOSED: { className: "bg-danger-100 text-danger-700", text: "Closed" },
+      DRAFT: { className: "bg-warning-100 text-warning-700", text: "Draft" }
     };
     
     const config = statusConfig[status] || statusConfig.DRAFT;
     return (
-      <Badge variation={config.variation} size="small">
+      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.className}`}>
         {config.text}
-      </Badge>
+      </span>
     );
   };
 
@@ -153,33 +153,25 @@ export default function Jobs() {
 
   return (
     <View padding="1rem">
-      <Flex direction="row" justifyContent="space-between" alignItems="center" marginBottom="1.5rem">
-        <View>
-          <Heading level={1}>Job Listings</Heading>
-          <Text color="gray.600">
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">Job Listings</h1>
+          <p className="text-gray-600">
             Manage all your job postings in one place. {jobs.length} total jobs.
-          </Text>
-        </View>
-        <Button 
-          variation="primary" 
-          size="large"
+          </p>
+        </div>
+        <button 
+          className="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
           onClick={() => router.push("/jobs/new")}
         >
           + Post New Job
-        </Button>
-      </Flex>
+        </button>
+      </div>
 
       {error && (
-        <View 
-          backgroundColor="red.50" 
-          padding="1rem" 
-          borderRadius="0.5rem" 
-          marginBottom="1rem"
-          border="1px solid"
-          borderColor="red.200"
-        >
-          <Text color="red.700">{error}</Text>
-        </View>
+        <div className="bg-danger-50 border border-danger-200 rounded-lg p-4 mb-4">
+          <p className="text-danger-600">{error}</p>
+        </div>
       )}
 
       {/* Search and Filter Controls */}
@@ -226,24 +218,24 @@ export default function Jobs() {
       {/* Job Listings */}
       {filteredJobs.length === 0 ? (
         <Card>
-          <View textAlign="center" padding="2rem">
-            <Text fontSize="1.125rem" fontWeight="semibold" marginBottom="0.5rem">
+          <div className="text-center py-8">
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">
               {jobs.length === 0 ? "No jobs posted yet" : "No jobs match your filters"}
-            </Text>
-            <Text color="gray.600" marginBottom="1rem">
+            </h3>
+            <p className="text-gray-600 mb-4">
               {jobs.length === 0 
                 ? "Get started by posting your first job listing." 
                 : "Try adjusting your search or filter criteria."}
-            </Text>
+            </p>
             {jobs.length === 0 && (
-              <Button 
-                variation="primary"
+              <button 
+                className="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                 onClick={() => router.push("/jobs/new")}
               >
                 Post Your First Job
-              </Button>
+              </button>
             )}
-          </View>
+          </div>
         </Card>
       ) : (
         <View>

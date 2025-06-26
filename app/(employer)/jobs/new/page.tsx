@@ -135,41 +135,51 @@ export default function NewJob() {
 
   if (success) {
     return (
-      <View padding="1rem">
-        <Alert variation="success" hasIcon>
-          <Heading level={4}>Job Posted Successfully!</Heading>
-          <Text>Your job posting has been created. Redirecting to job listings...</Text>
-        </Alert>
-      </View>
+      <div className="p-4">
+        <div className="bg-success-50 border border-success-200 rounded-lg p-6">
+          <div className="flex items-center">
+            <span className="text-success text-2xl mr-3">✅</span>
+            <div>
+              <h3 className="text-lg font-semibold text-success-700 mb-1">Job Posted Successfully!</h3>
+              <p className="text-success-600">Your job posting has been created. Redirecting to job listings...</p>
+            </div>
+          </div>
+        </div>
+      </div>
     );
   }
 
   return (
-    <View padding="1rem">
-      <Heading level={1}>Post a New Job</Heading>
-      <Text marginBottom="1rem" color="gray.600">
+    <div className="p-4">
+      <h1 className="text-3xl font-bold text-gray-800 mb-2">Post a New Job</h1>
+      <p className="text-gray-600 mb-6">
         Create a new job posting to attract qualified candidates to your organization.
-      </Text>
+      </p>
 
       {!companyProfile && (
-        <Alert variation="warning" hasIcon marginBottom="1rem">
-          <Text>
-            You need to create a company profile before posting jobs.{" "}
-            <Button 
-              variation="link" 
-              onClick={() => router.push("/company-profile/new")}
-              size="small"
-            >
-              Create Company Profile
-            </Button>
-          </Text>
-        </Alert>
+        <div className="bg-warning-50 border border-warning-200 rounded-lg p-4 mb-6">
+          <div className="flex items-center">
+            <span className="text-warning text-xl mr-3">⚠️</span>
+            <p className="text-warning-700">
+              You need to create a company profile before posting jobs.{" "}
+              <button 
+                className="text-primary hover:text-primary-600 underline font-medium"
+                onClick={() => router.push("/company-profile/new")}
+              >
+                Create Company Profile
+              </button>
+            </p>
+          </div>
+        </div>
       )}
 
       {error && (
-        <Alert variation="error" hasIcon marginBottom="1rem">
-          <Text>{error}</Text>
-        </Alert>
+        <div className="bg-danger-50 border border-danger-200 rounded-lg p-4 mb-6">
+          <div className="flex items-center">
+            <span className="text-danger text-xl mr-3">❌</span>
+            <p className="text-danger-600">{error}</p>
+          </div>
+        </div>
       )}
 
       <form onSubmit={handleSubmit}>
@@ -265,38 +275,33 @@ export default function NewJob() {
           </SelectField>
         </FormSection>
 
-        <Flex direction="row" gap="1rem" marginTop="2rem">
-          <Button
+        <div className="flex gap-4 mt-8">
+          <button
             type="submit"
-            variation="primary"
-            size="large"
-            isLoading={loading}
-            loadingText="Creating Job..."
-            isDisabled={!companyProfile}
+            className="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={loading || !companyProfile}
           >
-            {formData.status === "ACTIVE" ? "Publish Job" : "Save Draft"}
-          </Button>
+            {loading ? "Creating Job..." : (formData.status === "ACTIVE" ? "Publish Job" : "Save Draft")}
+          </button>
 
-          <Button
+          <button
             type="button"
-            variation="primary"
-            size="large"
+            className="bg-gray-100 text-gray-800 px-6 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleSaveDraft}
-            isDisabled={loading || !companyProfile}
+            disabled={loading || !companyProfile}
           >
             Save as Draft
-          </Button>
+          </button>
 
-          <Button
+          <button
             type="button"
-            variation="link"
-            size="large"
+            className="text-gray-600 hover:text-gray-800 px-6 py-3 rounded-lg font-medium transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:opacity-50"
             onClick={handleCancel}
-            isDisabled={loading}
+            disabled={loading}
           >
             Cancel
-          </Button>
-        </Flex>
+          </button>
+        </div>
       </form>
     </View>
   );

@@ -135,19 +135,13 @@ export default function JobDetail({ params }: { params: { id: string } }) {
     }
   };
 
-  const getStatusBadge = (status: string) => {
-    const statusConfig = {
-      ACTIVE: { className: "bg-success-100 text-success-700", text: "ACTIVE" },
-      DRAFT: { className: "bg-warning-100 text-warning-700", text: "DRAFT" },
-      CLOSED: { className: "bg-danger-100 text-danger-700", text: "CLOSED" }
-    };
-    
-    const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.DRAFT;
-    return (
-      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.className}`}>
-        {config.text}
-      </span>
-    );
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "ACTIVE": return "success";
+      case "DRAFT": return "warning";
+      case "CLOSED": return "error";
+      default: return "info";
+    }
   };
 
   const formatDate = (dateString: string) => {
@@ -172,199 +166,188 @@ export default function JobDetail({ params }: { params: { id: string } }) {
 
   if (loading) {
     return (
-      <div className="p-4 text-center">
-        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-        <p className="mt-4 text-gray-600">Loading job details...</p>
-      </div>
+      <View padding="1rem" textAlign="center">
+        <Loader size="large" />
+        <Text marginTop="1rem">Loading job details...</Text>
+      </View>
     );
   }
 
   if (error || !job) {
     return (
-      <div className="p-4">
-        <div className="bg-danger-50 border border-danger-200 rounded-lg p-6">
-          <div className="flex items-center">
-            <span className="text-danger text-2xl mr-3">❌</span>
-            <p className="text-danger-600">{error || "Job not found"}</p>
-          </div>
-        </div>
-        <button 
-          className="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 mt-4"
+      <View padding="1rem">
+        <Alert variation="error" hasIcon>
+          <Text>{error || "Job not found"}</Text>
+        </Alert>
+        <Button 
+          variation="primary" 
+          marginTop="1rem"
           onClick={() => router.push("/jobs")}
         >
           Back to Jobs
-        </button>
-      </div>
+        </Button>
+      </View>
     );
   }
 
   const stats = getApplicationStats();
 
   return (
-    <div className="p-4">
-      <div className="flex items-center mb-4">
-        <button 
-          className="text-primary hover:text-primary-600 font-medium"
+    <View padding="1rem">
+      <Flex direction="row" alignItems="center" marginBottom="1rem">
+        <Button 
+          variation="link" 
           onClick={() => router.push("/jobs")}
+          size="small"
         >
           ← Back to Jobs
-        </button>
-      </div>
+        </Button>
+      </Flex>
 
-      <div className="flex justify-between items-start mb-8">
-        <div className="flex-1">
-          <div className="flex items-center gap-4 mb-2">
-            <h1 className="text-3xl font-bold text-gray-800">{job.title}</h1>
-            {getStatusBadge(job.status)}
-          </div>
+      <Flex direction="row" justifyContent="space-between" alignItems="flex-start" marginBottom="2rem">
+        <View flex="1">
+          <Flex direction="row" alignItems="center" gap="1rem" marginBottom="0.5rem">
+            <Heading level={1}>{job.title}</Heading>
+            <Badge variation={getStatusColor(job.status)}>
+              {job.status}
+            </Badge>
+          </Flex>
           
           {job.company && (
-            <p className="text-gray-600 text-lg mb-2">
+            <Text color="gray.600" fontSize="1.125rem" marginBottom="0.5rem">
               {job.company.name}
               {job.company.location && ` • ${job.company.location}`}
-            </p>
+            </Text>
           )}
           
-          <p className="text-gray-500 text-sm">
+          <Text color="gray.500" fontSize="0.875rem">
             Posted: {formatDate(job.postedAt)}
-          </p>
-        </div>
+          </Text>
+        </View>
 
-        <div className="flex gap-2">
-          <button
-            className="bg-primary text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+        <Flex direction="row" gap="0.5rem">
+          <Button
+            variation="primary"
             onClick={() => router.push(`/jobs/${job.id}/edit`)}
-            disabled={actionLoading}
+            isDisabled={actionLoading}
           >
             Edit Job
-          </button>
+          </Button>
           
-          <button
-            className={`px-4 py-2 rounded-lg font-medium transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
-              job.status === "ACTIVE" 
-                ? "bg-danger text-white hover:bg-danger-600 focus:ring-danger" 
-                : "bg-primary text-white hover:bg-primary-600 focus:ring-primary"
-            }`}
+          <Button
+            variation={job.status === "ACTIVE" ? "destructive" : "primary"}
             onClick={handleStatusToggle}
-            disabled={actionLoading}
+            isLoading={actionLoading}
+            loadingText="Updating..."
           >
-            {actionLoading ? "Updating..." : (job.status === "ACTIVE" ? "Close Job" : "Reopen Job")}
-          </button>
+            {job.status === "ACTIVE" ? "Close Job" : "Reopen Job"}
+          </Button>
           
-          <button
-            className="bg-danger text-white px-4 py-2 rounded-lg font-medium hover:bg-danger-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-danger focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          <Button
+            variation="destructive"
             onClick={handleDelete}
-            disabled={actionLoading}
+            isDisabled={actionLoading}
           >
             Delete
-          </button>
-        </div>
-      </div>
+          </Button>
+        </Flex>
+      </Flex>
 
       {error && (
-        <div className="bg-danger-50 border border-danger-200 rounded-lg p-4 mb-4">
-          <div className="flex items-center">
-            <span className="text-danger text-xl mr-3">❌</span>
-            <p className="text-danger-600">{error}</p>
-          </div>
-        </div>
+        <Alert variation="error" hasIcon marginBottom="1rem">
+          <Text>{error}</Text>
+        </Alert>
       )}
 
-      <div className="flex gap-8">
-        <div className="flex-[2]">
-          <div className="bg-white rounded-lg shadow-card border border-gray-200 p-6 mb-8">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4">Job Description</h3>
-            <p className="whitespace-pre-wrap text-gray-700 leading-relaxed">{job.description}</p>
-          </div>
-        </div>
+      <Flex direction="row" gap="2rem">
+        <View flex="2">
+          <Card padding="1.5rem" marginBottom="2rem">
+            <Heading level={3} marginBottom="1rem">Job Description</Heading>
+            <Text whiteSpace="pre-wrap">{job.description}</Text>
+          </Card>
+        </View>
 
-        <div className="flex-1">
-          <div className="bg-white rounded-lg shadow-card border border-gray-200 p-6 mb-8">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4">Application Statistics</h3>
+        <View flex="1">
+          <Card padding="1.5rem" marginBottom="2rem">
+            <Heading level={3} marginBottom="1rem">Application Statistics</Heading>
             
-            <div className="space-y-3">
-              <div className="flex justify-between items-center">
-                <span className="font-semibold text-gray-700">Total Applications:</span>
-                <span className="text-gray-800">{stats.total}</span>
-              </div>
+            <Flex direction="column" gap="0.75rem">
+              <Flex justifyContent="space-between">
+                <Text fontWeight="semibold">Total Applications:</Text>
+                <Text>{stats.total}</Text>
+              </Flex>
               
-              <hr className="border-gray-200" />
+              <Divider />
               
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">New:</span>
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-info-100 text-info-700">
-                  {stats.new}
-                </span>
-              </div>
+              <Flex justifyContent="space-between">
+                <Text>New:</Text>
+                <Badge variation="info">{stats.new}</Badge>
+              </Flex>
               
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">In Review:</span>
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-warning-100 text-warning-700">
-                  {stats.inReview}
-                </span>
-              </div>
+              <Flex justifyContent="space-between">
+                <Text>In Review:</Text>
+                <Badge variation="warning">{stats.inReview}</Badge>
+              </Flex>
               
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Hired:</span>
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success-100 text-success-700">
-                  {stats.hired}
-                </span>
-              </div>
+              <Flex justifyContent="space-between">
+                <Text>Hired:</Text>
+                <Badge variation="success">{stats.hired}</Badge>
+              </Flex>
               
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Rejected:</span>
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-danger-100 text-danger-700">
-                  {stats.rejected}
-                </span>
-              </div>
-            </div>
+              <Flex justifyContent="space-between">
+                <Text>Rejected:</Text>
+                <Badge variation="error">{stats.rejected}</Badge>
+              </Flex>
+            </Flex>
 
             {stats.total > 0 && (
-              <button
-                className="w-full bg-primary text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 mt-4"
+              <Button
+                variation="primary"
+                width="100%"
+                marginTop="1rem"
                 onClick={() => router.push(`/jobs/${job.id}/applicants`)}
               >
                 View All Applicants
-              </button>
+              </Button>
             )}
-          </div>
+          </Card>
 
-          <div className="bg-white rounded-lg shadow-card border border-gray-200 p-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4">Quick Actions</h3>
+          <Card padding="1.5rem">
+            <Heading level={3} marginBottom="1rem">Quick Actions</Heading>
             
-            <div className="space-y-3">
-              <button
-                className="w-full bg-primary text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            <Flex direction="column" gap="0.75rem">
+              <Button
+                variation="primary"
+                width="100%"
                 onClick={() => router.push(`/jobs/${job.id}/edit`)}
-                disabled={actionLoading}
+                isDisabled={actionLoading}
               >
                 Edit Job Details
-              </button>
+              </Button>
               
-              <button
-                className={`w-full px-4 py-2 rounded-lg font-medium transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
-                  job.status === "ACTIVE" 
-                    ? "bg-danger text-white hover:bg-danger-600 focus:ring-danger" 
-                    : "bg-primary text-white hover:bg-primary-600 focus:ring-primary"
-                }`}
+              <Button
+                variation={job.status === "ACTIVE" ? "destructive" : "primary"}
+                width="100%"
                 onClick={handleStatusToggle}
-                disabled={actionLoading}
+                isLoading={actionLoading}
+                loadingText="Updating..."
               >
-                {actionLoading ? "Updating..." : (job.status === "ACTIVE" ? "Close Job" : "Reopen Job")}
-              </button>
+                {job.status === "ACTIVE" ? "Close Job" : "Reopen Job"}
+              </Button>
               
               {stats.total > 0 && (
-                <button
-                  className="w-full bg-primary text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                <Button
+                  variation="primary"
+                  width="100%"
                   onClick={() => router.push(`/jobs/${job.id}/applicants`)}
                 >
                   Manage Applicants ({stats.total})
-                </button>
+                </Button>
               )}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+            </Flex>
+          </Card>
+        </View>
+      </Flex>
+    </View>
   );
 }

@@ -135,19 +135,13 @@ export default function JobDetail({ params }: { params: { id: string } }) {
     }
   };
 
-  const getStatusBadge = (status: string) => {
-    const statusConfig = {
-      ACTIVE: { className: "bg-success-100 text-success-700", text: "ACTIVE" },
-      DRAFT: { className: "bg-warning-100 text-warning-700", text: "DRAFT" },
-      CLOSED: { className: "bg-danger-100 text-danger-700", text: "CLOSED" }
-    };
-    
-    const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.DRAFT;
-    return (
-      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.className}`}>
-        {config.text}
-      </span>
-    );
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "ACTIVE": return "success";
+      case "DRAFT": return "warning";
+      case "CLOSED": return "error";
+      default: return "info";
+    }
   };
 
   const formatDate = (dateString: string) => {
@@ -172,29 +166,27 @@ export default function JobDetail({ params }: { params: { id: string } }) {
 
   if (loading) {
     return (
-      <div className="p-4 text-center">
-        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-        <p className="mt-4 text-gray-600">Loading job details...</p>
-      </div>
+      <View padding="1rem" textAlign="center">
+        <Loader size="large" />
+        <Text marginTop="1rem">Loading job details...</Text>
+      </View>
     );
   }
 
   if (error || !job) {
     return (
-      <div className="p-4">
-        <div className="bg-danger-50 border border-danger-200 rounded-lg p-6">
-          <div className="flex items-center">
-            <span className="text-danger text-2xl mr-3">❌</span>
-            <p className="text-danger-600">{error || "Job not found"}</p>
-          </div>
-        </div>
-        <button 
-          className="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 mt-4"
+      <View padding="1rem">
+        <Alert variation="error" hasIcon>
+          <Text>{error || "Job not found"}</Text>
+        </Alert>
+        <Button 
+          variation="primary" 
+          marginTop="1rem"
           onClick={() => router.push("/jobs")}
         >
           Back to Jobs
-        </button>
-      </div>
+        </Button>
+      </View>
     );
   }
 

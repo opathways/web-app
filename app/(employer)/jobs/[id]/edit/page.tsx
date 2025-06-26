@@ -139,29 +139,34 @@ export default function EditJob({ params }: { params: { id: string } }) {
 
   if (fetchLoading) {
     return (
-      <View padding="1rem">
-        <Flex direction="column" alignItems="center" padding="2rem">
-          <Text>Loading job data...</Text>
-        </Flex>
-      </View>
+      <div className="p-4">
+        <div className="flex flex-col items-center py-8">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-4"></div>
+          <p className="text-gray-600">Loading job data...</p>
+        </div>
+      </div>
     );
   }
 
   if (error && !jobData) {
     return (
-      <View padding="1rem">
-        <Alert variation="error" hasIcon>
-          <Heading level={4}>Error Loading Job</Heading>
-          <Text>{error}</Text>
-          <Button 
-            variation="primary" 
+      <div className="p-4">
+        <div className="bg-danger-50 border border-danger-200 rounded-lg p-6">
+          <div className="flex items-center">
+            <span className="text-danger text-2xl mr-3">❌</span>
+            <div>
+              <h3 className="text-lg font-semibold text-danger-700 mb-1">Error Loading Job</h3>
+              <p className="text-danger-600">{error}</p>
+            </div>
+          </div>
+          <button 
+            className="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 mt-4"
             onClick={() => router.push("/jobs")}
-            marginTop="1rem"
           >
             Back to Jobs
-          </Button>
-        </Alert>
-      </View>
+          </button>
+        </div>
+      </div>
     );
   }
 

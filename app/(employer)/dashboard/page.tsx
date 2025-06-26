@@ -107,20 +107,20 @@ export default function DashboardPage() {
       
       {/* Profile Completion Indicator */}
       {!metrics?.profileComplete && (
-        <Card className="mb-6 border-l-4 border-l-yellow-500 bg-yellow-50">
-          <Flex direction="row" alignItems="center" gap="0.5rem">
-            <Text fontSize="1.25rem">⚠️</Text>
-            <View>
-              <Text fontWeight="semibold" color="orange.700">
+        <Card className="mb-6 border-l-4 border-l-warning bg-warning-50">
+          <div className="flex items-center gap-3">
+            <span className="text-xl">⚠️</span>
+            <div>
+              <h3 className="font-semibold text-warning-700">
                 {metrics?.companyProfileExists ? "Complete your company profile" : "Create your company profile"}
-              </Text>
-              <Text fontSize="0.875rem" color="orange.600">
+              </h3>
+              <p className="text-sm text-warning-600">
                 {metrics?.companyProfileExists 
                   ? "Add missing details to unlock all features" 
                   : "Set up your company profile to start posting jobs"}
-              </Text>
-            </View>
-          </Flex>
+              </p>
+            </div>
+          </div>
         </Card>
       )}
 
@@ -128,36 +128,36 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <Card>
           <div className="text-center">
-            <Text fontSize="2rem" fontWeight="bold" color="primary">
+            <div className="text-3xl font-bold text-primary mb-2">
               {metrics?.totalJobs || 0}
-            </Text>
-            <Text fontWeight="semibold" color="gray.700">
+            </div>
+            <div className="font-semibold text-gray-700">
               Total Jobs Posted
-            </Text>
+            </div>
           </div>
         </Card>
 
         <Card>
           <div className="text-center">
-            <Text fontSize="2rem" fontWeight="bold" color="green.600">
+            <div className="text-3xl font-bold text-success mb-2">
               {metrics?.activeJobs || 0}
-            </Text>
-            <Text fontWeight="semibold" color="gray.700">
+            </div>
+            <div className="font-semibold text-gray-700">
               Active Jobs
-            </Text>
+            </div>
           </div>
         </Card>
 
         <Card>
           <div className="text-center">
-            <Text fontSize="2rem" fontWeight="bold" color="blue.600">
+            <div className="text-3xl font-bold text-info mb-2">
               {metrics?.totalApplicants || 0}
-            </Text>
-            <Text fontWeight="semibold" color="gray.700">
+            </div>
+            <div className="font-semibold text-gray-700">
               Total Applicants
-            </Text>
+            </div>
             {metrics && metrics.totalApplicants > 0 && (
-              <div className="mt-2 text-sm text-gray-600">
+              <div className="mt-3 text-sm text-gray-600 space-y-1">
                 <div>New: {metrics.statusBreakdown.new}</div>
                 <div>In Review: {metrics.statusBreakdown.inReview}</div>
                 <div>Hired: {metrics.statusBreakdown.hired}</div>
@@ -168,46 +168,48 @@ export default function DashboardPage() {
 
         <Card>
           <div className="text-center">
-            <Text fontSize="1.5rem" fontWeight="bold" color={metrics?.profileComplete ? "green.600" : "orange.600"}>
+            <div className={`text-2xl font-bold mb-2 ${metrics?.profileComplete ? 'text-success' : 'text-warning'}`}>
               {metrics?.profileComplete ? "✓" : "!"}
-            </Text>
-            <Text fontWeight="semibold" color="gray.700">
+            </div>
+            <div className="font-semibold text-gray-700">
               Company Profile
-            </Text>
-            <Text fontSize="0.875rem" color="gray.600">
+            </div>
+            <div className="text-sm text-gray-600">
               {metrics?.profileComplete ? "Complete" : "Incomplete"}
-            </Text>
+            </div>
           </div>
         </Card>
       </div>
 
       {/* Quick Action Buttons */}
       <Card>
-        <Heading level={3} marginBottom="1rem">Quick Actions</Heading>
-        <Flex direction="row" gap="1rem" wrap="wrap">
-          <Button 
-            variation="primary" 
-            size="large"
+        <h2 className="text-xl font-semibold text-gray-800 mb-6">Quick Actions</h2>
+        <div className="flex flex-wrap gap-4">
+          <button 
+            className="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
             onClick={handlePostNewJob}
           >
             📝 Post a New Job
-          </Button>
+          </button>
           
-          <Button 
-            size="large"
+          <button 
+            className="bg-gray-100 text-gray-800 px-6 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
             onClick={handleViewApplicants}
           >
             👥 View Applicants
-          </Button>
+          </button>
           
-          <Button 
-            variation={metrics?.profileComplete ? "link" : "primary"} 
-            size="large"
+          <button 
+            className={`px-6 py-3 rounded-lg font-medium transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+              metrics?.profileComplete 
+                ? "text-primary hover:text-primary-600 focus:ring-primary" 
+                : "bg-primary text-white hover:bg-primary-600 focus:ring-primary"
+            }`}
             onClick={handleEditProfile}
           >
             {metrics?.companyProfileExists ? "✏️ Edit Profile" : "🏢 Create Profile"}
-          </Button>
-        </Flex>
+          </button>
+        </div>
       </Card>
     </View>
   );

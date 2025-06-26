@@ -5,6 +5,7 @@ import { generateClient } from "aws-amplify/data";
 import { Heading, View, Text, Button, Flex } from "@aws-amplify/ui-react";
 import { useRouter } from "next/navigation";
 import Card from "@/components/Card";
+import { DocumentIcon, UsersIcon, EditIcon, BuildingIcon, WarningIcon, CheckIcon } from "@/components/icons";
 import type { Schema } from "@/amplify/data/resource";
 
 const client = generateClient<Schema>();
@@ -109,7 +110,7 @@ export default function DashboardPage() {
       {!metrics?.profileComplete && (
         <Card className="mb-6 border-l-4 border-l-warning bg-warning-50">
           <div className="flex items-center gap-3">
-            <span className="text-xl">⚠️</span>
+            <WarningIcon className="text-warning-600" size={20} />
             <div>
               <h3 className="font-semibold text-warning-700">
                 {metrics?.companyProfileExists ? "Complete your company profile" : "Create your company profile"}
@@ -168,8 +169,12 @@ export default function DashboardPage() {
 
         <Card>
           <div className="text-center">
-            <div className={`text-2xl font-bold mb-2 ${metrics?.profileComplete ? 'text-success' : 'text-warning'}`}>
-              {metrics?.profileComplete ? "✓" : "!"}
+            <div className={`mb-2 ${metrics?.profileComplete ? 'text-success' : 'text-warning'}`}>
+              {metrics?.profileComplete ? (
+                <CheckIcon size={24} className="mx-auto" />
+              ) : (
+                <WarningIcon size={24} className="mx-auto" />
+              )}
             </div>
             <div className="font-semibold text-gray-700">
               Company Profile
@@ -186,28 +191,40 @@ export default function DashboardPage() {
         <h2 className="text-xl font-semibold text-gray-800 mb-6">Quick Actions</h2>
         <div className="flex flex-wrap gap-4">
           <button 
-            className="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            className="bg-primary text-white px-6 py-3 rounded-md font-medium hover:bg-primary/90 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center gap-2"
             onClick={handlePostNewJob}
           >
-            📝 Post a New Job
+            <DocumentIcon size={16} />
+            Post a New Job
           </button>
           
           <button 
-            className="bg-gray-100 text-gray-800 px-6 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+            className="bg-white border border-gray-300 text-gray-800 px-6 py-3 rounded-md font-medium hover:bg-gray-100 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 flex items-center gap-2"
             onClick={handleViewApplicants}
           >
-            👥 View Applicants
+            <UsersIcon size={16} />
+            View Applicants
           </button>
           
           <button 
-            className={`px-6 py-3 rounded-lg font-medium transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+            className={`px-6 py-3 rounded-md font-medium transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 flex items-center gap-2 ${
               metrics?.profileComplete 
-                ? "text-primary hover:text-primary-600 focus:ring-primary" 
-                : "bg-primary text-white hover:bg-primary-600 focus:ring-primary"
+                ? "text-primary hover:text-primary-600 focus:ring-primary bg-white border border-gray-300 hover:bg-gray-50" 
+                : "bg-primary text-white hover:bg-primary/90 focus:ring-primary"
             }`}
             onClick={handleEditProfile}
           >
-            {metrics?.companyProfileExists ? "✏️ Edit Profile" : "🏢 Create Profile"}
+            {metrics?.companyProfileExists ? (
+              <>
+                <EditIcon size={16} />
+                Edit Profile
+              </>
+            ) : (
+              <>
+                <BuildingIcon size={16} />
+                Create Profile
+              </>
+            )}
           </button>
         </div>
       </Card>

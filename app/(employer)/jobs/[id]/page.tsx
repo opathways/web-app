@@ -15,6 +15,7 @@ import {
   Loader
 } from "@aws-amplify/ui-react";
 import { useRouter } from "next/navigation";
+import { XIcon } from "@/components/icons";
 import type { Schema } from "@/amplify/data/resource";
 
 const client = generateClient<Schema>();
@@ -184,12 +185,12 @@ export default function JobDetail({ params }: { params: { id: string } }) {
       <div className="p-4">
         <div className="bg-danger-50 border border-danger-200 rounded-lg p-6">
           <div className="flex items-center">
-            <span className="text-danger text-2xl mr-3">❌</span>
+            <XIcon size={24} className="text-danger mr-3" />
             <p className="text-danger-600">{error || "Job not found"}</p>
           </div>
         </div>
         <button 
-          className="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 mt-4"
+          className="bg-primary text-white font-medium px-4 py-2 rounded-md hover:bg-primary/90 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary mt-4"
           onClick={() => router.push("/jobs")}
         >
           Back to Jobs
@@ -232,7 +233,7 @@ export default function JobDetail({ params }: { params: { id: string } }) {
 
         <div className="flex gap-2">
           <button
-            className="bg-primary text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-primary text-white font-medium px-4 py-2 rounded-md hover:bg-primary/90 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={() => router.push(`/jobs/${job.id}/edit`)}
             disabled={actionLoading}
           >
@@ -240,10 +241,10 @@ export default function JobDetail({ params }: { params: { id: string } }) {
           </button>
           
           <button
-            className={`px-4 py-2 rounded-lg font-medium transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
+            className={`font-medium px-4 py-2 rounded-md transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
               job.status === "ACTIVE" 
-                ? "bg-danger text-white hover:bg-danger-600 focus:ring-danger" 
-                : "bg-primary text-white hover:bg-primary-600 focus:ring-primary"
+                ? "bg-danger text-white hover:bg-danger/90 focus:ring-danger" 
+                : "bg-primary text-white hover:bg-primary/90 focus:ring-primary"
             }`}
             onClick={handleStatusToggle}
             disabled={actionLoading}
@@ -252,7 +253,7 @@ export default function JobDetail({ params }: { params: { id: string } }) {
           </button>
           
           <button
-            className="bg-danger text-white px-4 py-2 rounded-lg font-medium hover:bg-danger-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-danger focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-danger text-white font-medium px-4 py-2 rounded-md hover:bg-danger/90 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-danger disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleDelete}
             disabled={actionLoading}
           >
@@ -264,7 +265,7 @@ export default function JobDetail({ params }: { params: { id: string } }) {
       {error && (
         <div className="bg-danger-50 border border-danger-200 rounded-lg p-4 mb-4">
           <div className="flex items-center">
-            <span className="text-danger text-xl mr-3">❌</span>
+            <XIcon size={20} className="text-danger mr-3" />
             <p className="text-danger-600">{error}</p>
           </div>
         </div>
@@ -321,7 +322,7 @@ export default function JobDetail({ params }: { params: { id: string } }) {
 
             {stats.total > 0 && (
               <button
-                className="w-full bg-primary text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 mt-4"
+                className="w-full bg-primary text-white font-medium px-4 py-2 rounded-md hover:bg-primary/90 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary mt-4"
                 onClick={() => router.push(`/jobs/${job.id}/applicants`)}
               >
                 View All Applicants
@@ -334,7 +335,7 @@ export default function JobDetail({ params }: { params: { id: string } }) {
             
             <div className="space-y-3">
               <button
-                className="w-full bg-primary text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-primary text-white font-medium px-4 py-2 rounded-md hover:bg-primary/90 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={() => router.push(`/jobs/${job.id}/edit`)}
                 disabled={actionLoading}
               >
@@ -342,10 +343,10 @@ export default function JobDetail({ params }: { params: { id: string } }) {
               </button>
               
               <button
-                className={`w-full px-4 py-2 rounded-lg font-medium transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
+                className={`w-full font-medium px-4 py-2 rounded-md transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
                   job.status === "ACTIVE" 
-                    ? "bg-danger text-white hover:bg-danger-600 focus:ring-danger" 
-                    : "bg-primary text-white hover:bg-primary-600 focus:ring-primary"
+                    ? "bg-danger text-white hover:bg-danger/90 focus:ring-danger" 
+                    : "bg-primary text-white hover:bg-primary/90 focus:ring-primary"
                 }`}
                 onClick={handleStatusToggle}
                 disabled={actionLoading}
@@ -355,7 +356,7 @@ export default function JobDetail({ params }: { params: { id: string } }) {
               
               {stats.total > 0 && (
                 <button
-                  className="w-full bg-primary text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                  className="w-full bg-primary text-white font-medium px-4 py-2 rounded-md hover:bg-primary/90 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
                   onClick={() => router.push(`/jobs/${job.id}/applicants`)}
                 >
                   Manage Applicants ({stats.total})

@@ -14,7 +14,7 @@ export default function Card({ children, className = "", ...rest }: CardProps) {
   return (
     <AmplifyCard
       className={[
-        "bg-white rounded-lg shadow-card border border-gray-200 p-6",
+        "bg-white rounded-md shadow-sm border border-gray-200 p-6",
         className
       ].join(" ")}
       {...rest}

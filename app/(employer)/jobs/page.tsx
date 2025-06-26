@@ -161,7 +161,7 @@ export default function Jobs() {
           </p>
         </div>
         <button 
-          className="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+          className="bg-primary text-white font-medium px-4 py-2 rounded-md hover:bg-primary/90 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
           onClick={() => router.push("/jobs/new")}
         >
           + Post New Job
@@ -258,7 +258,7 @@ export default function Jobs() {
             </p>
             {jobs.length === 0 && (
               <button 
-                className="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                className="bg-primary text-white font-medium px-4 py-2 rounded-md hover:bg-primary/90 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
                 onClick={() => router.push("/jobs/new")}
               >
                 Post Your First Job
@@ -295,14 +295,14 @@ export default function Jobs() {
                 
                 <div className="flex flex-col gap-2 min-w-[200px]">
                   <button
-                    className="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg font-medium hover:bg-gray-200 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                    className="bg-white border border-gray-300 text-gray-800 font-medium px-4 py-2 rounded-md hover:bg-gray-100 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
                     onClick={() => router.push(`/jobs/${job.id}`)}
                   >
                     View Details
                   </button>
                   
                   <button
-                    className="px-4 py-2 text-primary hover:text-primary-600 hover:bg-primary-50 rounded-lg font-medium transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                    className="text-primary font-medium hover:underline px-4 py-2 rounded-md transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
                     onClick={() => router.push(`/jobs/${job.id}/edit`)}
                   >
                     Edit Job
@@ -310,7 +310,7 @@ export default function Jobs() {
                   
                   {job.status !== "DRAFT" && (
                     <button
-                      className="px-4 py-2 text-primary hover:text-primary-600 hover:bg-primary-50 rounded-lg font-medium transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                      className="text-primary font-medium hover:underline px-4 py-2 rounded-md transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
                       onClick={() => handleStatusToggle(job.id, job.status as JobStatus)}
                     >
                       {job.status === "ACTIVE" ? "Close Job" : "Reopen Job"}
@@ -319,7 +319,7 @@ export default function Jobs() {
                   
                   {job.applicationCount > 0 && (
                     <button
-                      className="px-4 py-2 text-primary hover:text-primary-600 hover:bg-primary-50 rounded-lg font-medium transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                      className="text-primary font-medium hover:underline px-4 py-2 rounded-md transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
                       onClick={() => router.push(`/jobs/${job.id}/applicants`)}
                     >
                       View Applicants ({job.applicationCount})

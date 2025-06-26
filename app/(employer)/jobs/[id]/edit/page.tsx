@@ -139,54 +139,67 @@ export default function EditJob({ params }: { params: { id: string } }) {
 
   if (fetchLoading) {
     return (
-      <View padding="1rem">
-        <Flex direction="column" alignItems="center" padding="2rem">
-          <Text>Loading job data...</Text>
-        </Flex>
-      </View>
+      <div className="p-4">
+        <div className="flex flex-col items-center py-8">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-4"></div>
+          <p className="text-gray-600">Loading job data...</p>
+        </div>
+      </div>
     );
   }
 
   if (error && !jobData) {
     return (
-      <View padding="1rem">
-        <Alert variation="error" hasIcon>
-          <Heading level={4}>Error Loading Job</Heading>
-          <Text>{error}</Text>
-          <Button 
-            variation="primary" 
+      <div className="p-4">
+        <div className="bg-danger-50 border border-danger-200 rounded-lg p-6">
+          <div className="flex items-center">
+            <span className="text-danger text-2xl mr-3">❌</span>
+            <div>
+              <h3 className="text-lg font-semibold text-danger-700 mb-1">Error Loading Job</h3>
+              <p className="text-danger-600">{error}</p>
+            </div>
+          </div>
+          <button 
+            className="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 mt-4"
             onClick={() => router.push("/jobs")}
-            marginTop="1rem"
           >
             Back to Jobs
-          </Button>
-        </Alert>
-      </View>
+          </button>
+        </div>
+      </div>
     );
   }
 
   if (success) {
     return (
-      <View padding="1rem">
-        <Alert variation="success" hasIcon>
-          <Heading level={4}>Job Updated Successfully!</Heading>
-          <Text>Your job posting has been updated. Redirecting to job details...</Text>
-        </Alert>
-      </View>
+      <div className="p-4">
+        <div className="bg-success-50 border border-success-200 rounded-lg p-6">
+          <div className="flex items-center">
+            <span className="text-success text-2xl mr-3">✅</span>
+            <div>
+              <h3 className="text-lg font-semibold text-success-700 mb-1">Job Updated Successfully!</h3>
+              <p className="text-success-600">Your job posting has been updated. Redirecting to job details...</p>
+            </div>
+          </div>
+        </div>
+      </div>
     );
   }
 
   return (
-    <View padding="1rem">
-      <Heading level={1}>Edit Job Posting</Heading>
-      <Text marginBottom="1rem" color="gray.600">
+    <div className="p-4">
+      <h1 className="text-3xl font-bold text-gray-800 mb-2">Edit Job Posting</h1>
+      <p className="text-gray-600 mb-6">
         Update your job posting details to keep the listing current and accurate.
-      </Text>
+      </p>
 
       {error && (
-        <Alert variation="error" hasIcon marginBottom="1rem">
-          <Text>{error}</Text>
-        </Alert>
+        <div className="bg-danger-50 border border-danger-200 rounded-lg p-4 mb-6">
+          <div className="flex items-center">
+            <span className="text-danger text-xl mr-3">❌</span>
+            <p className="text-danger-600">{error}</p>
+          </div>
+        </div>
       )}
 
       <form onSubmit={handleSubmit}>
@@ -194,74 +207,89 @@ export default function EditJob({ params }: { params: { id: string } }) {
           title="Job Information" 
           description="Edit the job details"
         >
-          <TextField
-            label="Job Title"
-            placeholder="e.g. Senior Software Engineer"
-            value={formData.title}
-            onChange={(e) => handleInputChange("title", e.target.value)}
-            required
-            isDisabled={loading}
-          />
+          <div>
+            <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+              Job Title *
+            </label>
+            <input
+              type="text"
+              id="title"
+              placeholder="e.g. Senior Software Engineer"
+              value={formData.title}
+              onChange={(e) => handleInputChange("title", e.target.value)}
+              required
+              disabled={loading}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary disabled:opacity-50 disabled:cursor-not-allowed"
+            />
+          </div>
 
-          <TextAreaField
-            label="Job Description"
-            placeholder="Describe the role, responsibilities, and what makes this position exciting..."
-            value={formData.description}
-            onChange={(e) => handleInputChange("description", e.target.value)}
-            rows={8}
-            required
-            isDisabled={loading}
-          />
+          <div>
+            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+              Job Description *
+            </label>
+            <textarea
+              id="description"
+              placeholder="Describe the role, responsibilities, and what makes this position exciting..."
+              value={formData.description}
+              onChange={(e) => handleInputChange("description", e.target.value)}
+              rows={8}
+              required
+              disabled={loading}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary disabled:opacity-50 disabled:cursor-not-allowed"
+            />
+          </div>
         </FormSection>
 
         <FormSection 
           title="Job Status" 
           description="Control the visibility and status of your job posting"
         >
-          <SelectField
-            label="Status"
-            value={formData.status}
-            onChange={(e) => handleInputChange("status", e.target.value as "DRAFT" | "ACTIVE" | "CLOSED")}
-            isDisabled={loading}
-          >
-            <option value="DRAFT">Draft (Not visible to candidates)</option>
-            <option value="ACTIVE">Active (Accepting applications)</option>
-            <option value="CLOSED">Closed (No longer accepting applications)</option>
-          </SelectField>
+          <div>
+            <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-2">
+              Status
+            </label>
+            <select
+              id="status"
+              value={formData.status}
+              onChange={(e) => handleInputChange("status", e.target.value as "DRAFT" | "ACTIVE" | "CLOSED")}
+              disabled={loading}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <option value="DRAFT">Draft (Not visible to candidates)</option>
+              <option value="ACTIVE">Active (Accepting applications)</option>
+              <option value="CLOSED">Closed (No longer accepting applications)</option>
+            </select>
+          </div>
         </FormSection>
 
-        <Flex direction="row" gap="1rem" marginTop="2rem" wrap="wrap">
-          <Button
+        <div className="flex gap-4 mt-8 flex-wrap">
+          <button
             type="submit"
-            variation="primary"
-            size="large"
-            isLoading={loading}
-            loadingText="Updating Job..."
+            className="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={loading}
           >
-            Update Job
-          </Button>
+            {loading ? "Updating Job..." : "Update Job"}
+          </button>
 
-          <Button
+          <button
             type="button"
-            variation="link"
-            size="large"
+            className="text-gray-600 hover:text-gray-800 px-6 py-3 rounded-lg font-medium transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:opacity-50"
             onClick={handleCancel}
-            isDisabled={loading}
+            disabled={loading}
           >
             Cancel
-          </Button>
+          </button>
 
-          <Button
+          <button
             type="button"
-            variation="destructive"
-            size="large"
+            className="bg-danger text-white px-6 py-3 rounded-lg font-medium hover:bg-danger-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-danger focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleDelete}
-            isDisabled={loading}
+            disabled={loading}
           >
             Delete Job
-          </Button>
-        </Flex>
+          </button>
+        </div>
       </form>
-    </View>
+    </div>
   );
 }

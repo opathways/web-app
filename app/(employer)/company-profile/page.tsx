@@ -52,29 +52,27 @@ export default function CompanyProfile() {
 
   if (loading) {
     return (
-      <View padding="1rem">
-        <Heading level={1}>Company Profile</Heading>
-        <Text>Loading company profile...</Text>
-      </View>
+      <div className="p-4">
+        <h1 className="text-3xl font-bold text-gray-800 mb-6">Company Profile</h1>
+        <p className="text-gray-600">Loading company profile...</p>
+      </div>
     );
   }
 
   if (error) {
     return (
-      <View padding="1rem">
-        <Heading level={1}>Company Profile</Heading>
-        <Card className="border-l-4 border-l-red-500 bg-red-50">
-          <Text color="red.600">{error}</Text>
-          <Button 
-            variation="primary" 
-            size="small" 
+      <div className="p-4">
+        <h1 className="text-3xl font-bold text-gray-800 mb-6">Company Profile</h1>
+        <Card className="border-l-4 border-l-danger bg-danger-50">
+          <p className="text-danger-600 mb-4">{error}</p>
+          <button 
+            className="bg-primary text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
             onClick={fetchCompanyProfile}
-            className="mt-4"
           >
             Try Again
-          </Button>
+          </button>
         </Card>
-      </View>
+      </div>
     );
   }
 
@@ -98,13 +96,12 @@ export default function CompanyProfile() {
               <p className="text-gray-600 mb-6">
                 You haven't created a company profile yet. Set up your profile to start posting jobs and attracting candidates.
               </p>
-              <Button 
-                variation="primary" 
-                size="large"
+              <button 
+                className="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                 onClick={handleCreateProfile}
               >
                 Create Company Profile
-              </Button>
+              </button>
             </div>
           </Card>
         </div>
@@ -120,12 +117,12 @@ export default function CompanyProfile() {
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Company Profile</h1>
             <p className="text-gray-600">View your company profile information and details.</p>
           </div>
-          <Button 
-            variation="primary"
+          <button 
+            className="bg-primary text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
             onClick={handleEditProfile}
           >
             ✏️ Edit Profile
-          </Button>
+          </button>
         </div>
 
         <div className="space-y-6">
@@ -139,7 +136,7 @@ export default function CompanyProfile() {
               <div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">{profile.name}</h3>
                 {profile.industry && (
-                  <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">
+                  <span className="inline-block px-3 py-1 bg-info-100 text-info-700 text-sm font-medium rounded-full">
                     {profile.industry}
                   </span>
                 )}
@@ -178,7 +175,7 @@ export default function CompanyProfile() {
                     <span className="mr-2">✉️</span>
                     <a 
                       href={`mailto:${profile.contactEmail}`}
-                      className="text-blue-600 hover:text-blue-800 hover:underline"
+                      className="text-primary hover:text-primary-600 hover:underline transition-colors duration-150"
                     >
                       {profile.contactEmail}
                     </a>
@@ -195,7 +192,7 @@ export default function CompanyProfile() {
                       href={profile.website}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-800 hover:underline break-all"
+                      className="text-primary hover:text-primary-600 hover:underline break-all transition-colors duration-150"
                     >
                       {profile.website}
                     </a>
@@ -214,37 +211,37 @@ export default function CompanyProfile() {
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">Company Name</span>
-                <span className={`text-sm font-medium ${profile.name ? 'text-green-600' : 'text-red-600'}`}>
+                <span className={`text-sm font-medium ${profile.name ? 'text-success' : 'text-danger'}`}>
                   {profile.name ? '✓ Complete' : '✗ Missing'}
                 </span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">Description</span>
-                <span className={`text-sm font-medium ${profile.description ? 'text-green-600' : 'text-yellow-600'}`}>
+                <span className={`text-sm font-medium ${profile.description ? 'text-success' : 'text-warning'}`}>
                   {profile.description ? '✓ Complete' : '⚠ Optional'}
                 </span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">Industry</span>
-                <span className={`text-sm font-medium ${profile.industry ? 'text-green-600' : 'text-yellow-600'}`}>
+                <span className={`text-sm font-medium ${profile.industry ? 'text-success' : 'text-warning'}`}>
                   {profile.industry ? '✓ Complete' : '⚠ Optional'}
                 </span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">Location</span>
-                <span className={`text-sm font-medium ${profile.location ? 'text-green-600' : 'text-yellow-600'}`}>
+                <span className={`text-sm font-medium ${profile.location ? 'text-success' : 'text-warning'}`}>
                   {profile.location ? '✓ Complete' : '⚠ Optional'}
                 </span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">Contact Email</span>
-                <span className={`text-sm font-medium ${profile.contactEmail ? 'text-green-600' : 'text-red-600'}`}>
+                <span className={`text-sm font-medium ${profile.contactEmail ? 'text-success' : 'text-danger'}`}>
                   {profile.contactEmail ? '✓ Complete' : '✗ Missing'}
                 </span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">Website</span>
-                <span className={`text-sm font-medium ${profile.website ? 'text-green-600' : 'text-yellow-600'}`}>
+                <span className={`text-sm font-medium ${profile.website ? 'text-success' : 'text-warning'}`}>
                   {profile.website ? '✓ Complete' : '⚠ Optional'}
                 </span>
               </div>

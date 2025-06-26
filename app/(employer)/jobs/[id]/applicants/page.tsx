@@ -159,14 +159,20 @@ export default function JobApplicants({ params }: { params: { id: string } }) {
     }
   };
 
-  const getStatusBadgeVariation = (status: ApplicationStatus) => {
-    switch (status) {
-      case "NEW": return "info";
-      case "IN_REVIEW": return "warning";
-      case "HIRED": return "success";
-      case "REJECTED": return "error";
-      default: return "info";
-    }
+  const getStatusBadge = (status: ApplicationStatus) => {
+    const statusConfig = {
+      NEW: { className: "bg-info-100 text-info-700", text: "NEW" },
+      IN_REVIEW: { className: "bg-warning-100 text-warning-700", text: "IN REVIEW" },
+      HIRED: { className: "bg-success-100 text-success-700", text: "HIRED" },
+      REJECTED: { className: "bg-danger-100 text-danger-700", text: "REJECTED" }
+    };
+    
+    const config = statusConfig[status] || statusConfig.NEW;
+    return (
+      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.className}`}>
+        {config.text}
+      </span>
+    );
   };
 
   const formatDate = (dateString: string | null | undefined) => {
@@ -176,209 +182,218 @@ export default function JobApplicants({ params }: { params: { id: string } }) {
 
   if (loading) {
     return (
-      <View padding="1rem">
-        <Heading level={1}>Job Applicants</Heading>
-        <Text>Loading applicants...</Text>
-      </View>
+      <div className="p-4">
+        <h1 className="text-3xl font-bold text-gray-800 mb-2">Job Applicants</h1>
+        <p className="text-gray-600">Loading applicants...</p>
+      </div>
     );
   }
 
   return (
-    <View padding="1rem">
-      <Flex direction="row" alignItems="center" justifyContent="space-between" marginBottom="1rem">
-        <View>
-          <Heading level={1}>Job Applicants</Heading>
+    <div className="p-4">
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">Job Applicants</h1>
           {jobTitle && (
-            <Text color="gray.600" fontSize="1.125rem">
+            <p className="text-lg text-gray-600">
               {jobTitle}
-            </Text>
+            </p>
           )}
-          <Text color="gray.500" fontSize="0.875rem">
+          <p className="text-sm text-gray-500">
             {filteredApplicants.length} applicant{filteredApplicants.length !== 1 ? 's' : ''}
             {statusFilter !== "ALL" && ` (${statusFilter.toLowerCase().replace('_', ' ')})`}
-          </Text>
-        </View>
-        <Button
-          variation="link"
+          </p>
+        </div>
+        <button
+          className="text-gray-600 hover:text-gray-800 font-medium transition-colors duration-150"
           onClick={() => router.back()}
         >
           ← Back to Job Details
-        </Button>
-      </Flex>
+        </button>
+      </div>
 
       {error && (
-        <Alert variation="error" marginBottom="1rem">
-          {error}
-        </Alert>
+        <div className="bg-danger-50 border border-danger-200 rounded-lg p-4 mb-6">
+          <p className="text-danger-600">{error}</p>
+        </div>
       )}
 
-      <Flex direction="row" gap="1rem" marginBottom="1rem" wrap="wrap">
-        <SelectField
-          label="Filter by Status"
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-        >
-          <option value="ALL">All Statuses</option>
-          <option value="NEW">New</option>
-          <option value="IN_REVIEW">In Review</option>
-          <option value="HIRED">Hired</option>
-          <option value="REJECTED">Rejected</option>
-        </SelectField>
+      <div className="flex gap-4 mb-6 flex-wrap">
+        <div>
+          <label htmlFor="statusFilter" className="block text-sm font-medium text-gray-700 mb-2">
+            Filter by Status
+          </label>
+          <select
+            id="statusFilter"
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+          >
+            <option value="ALL">All Statuses</option>
+            <option value="NEW">New</option>
+            <option value="IN_REVIEW">In Review</option>
+            <option value="HIRED">Hired</option>
+            <option value="REJECTED">Rejected</option>
+          </select>
+        </div>
 
-        <SelectField
-          label="Sort by Date"
-          value={sortOrder}
-          onChange={(e) => setSortOrder(e.target.value as "newest" | "oldest")}
-        >
-          <option value="newest">Newest First</option>
-          <option value="oldest">Oldest First</option>
-        </SelectField>
-      </Flex>
+        <div>
+          <label htmlFor="sortOrder" className="block text-sm font-medium text-gray-700 mb-2">
+            Sort by Date
+          </label>
+          <select
+            id="sortOrder"
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value as "newest" | "oldest")}
+            className="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+          >
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+          </select>
+        </div>
+      </div>
 
       {selectedApplicants.size > 0 && (
-        <View 
-          backgroundColor="blue.50" 
-          padding="1rem" 
-          borderRadius="0.5rem" 
-          marginBottom="1rem"
-        >
-          <Flex direction="row" alignItems="center" gap="1rem" wrap="wrap">
-            <Text fontWeight="semibold">
+        <div className="bg-info-50 border border-info-200 rounded-lg p-4 mb-6">
+          <div className="flex items-center gap-4 flex-wrap">
+            <p className="font-semibold text-gray-800">
               {selectedApplicants.size} applicant{selectedApplicants.size !== 1 ? 's' : ''} selected
-            </Text>
-            <Button
-              size="small"
+            </p>
+            <button
+              className="bg-gray-100 text-gray-800 px-3 py-1.5 rounded-md text-sm font-medium hover:bg-gray-200 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:opacity-50"
               onClick={() => handleBulkStatusUpdate("IN_REVIEW")}
-              isLoading={bulkUpdateLoading}
+              disabled={bulkUpdateLoading}
             >
-              Mark as In Review
-            </Button>
-            <Button
-              size="small"
-              variation="primary"
+              {bulkUpdateLoading ? "Updating..." : "Mark as In Review"}
+            </button>
+            <button
+              className="bg-primary text-white px-3 py-1.5 rounded-md text-sm font-medium hover:bg-primary-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50"
               onClick={() => handleBulkStatusUpdate("HIRED")}
-              isLoading={bulkUpdateLoading}
+              disabled={bulkUpdateLoading}
             >
-              Mark as Hired
-            </Button>
-            <Button
-              size="small"
-              variation="destructive"
+              {bulkUpdateLoading ? "Updating..." : "Mark as Hired"}
+            </button>
+            <button
+              className="bg-danger text-white px-3 py-1.5 rounded-md text-sm font-medium hover:bg-danger-600 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-danger focus:ring-offset-2 disabled:opacity-50"
               onClick={() => handleBulkStatusUpdate("REJECTED")}
-              isLoading={bulkUpdateLoading}
+              disabled={bulkUpdateLoading}
             >
-              Mark as Rejected
-            </Button>
-          </Flex>
-        </View>
+              {bulkUpdateLoading ? "Updating..." : "Mark as Rejected"}
+            </button>
+          </div>
+        </div>
       )}
 
       {filteredApplicants.length === 0 ? (
-        <View 
-          backgroundColor="gray.50" 
-          padding="2rem" 
-          borderRadius="0.5rem"
-          textAlign="center"
-        >
-          <Text fontSize="1.125rem" fontWeight="semibold" marginBottom="0.5rem">
+        <div className="bg-gray-50 p-8 rounded-lg text-center">
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">
             No Applicants Found
-          </Text>
-          <Text color="gray.600">
+          </h3>
+          <p className="text-gray-600">
             {statusFilter === "ALL" 
               ? "No one has applied to this job yet." 
               : `No applicants with status "${statusFilter.toLowerCase().replace('_', ' ')}" found.`}
-          </Text>
-        </View>
+          </p>
+        </div>
       ) : (
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <CheckboxField
-                  label=""
-                  checked={selectedApplicants.size === filteredApplicants.length && filteredApplicants.length > 0}
-                  onChange={toggleSelectAll}
-                  name="selectAll"
-                />
-              </TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Applied Date</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Resume</TableCell>
-              <TableCell>Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredApplicants.map((applicant) => (
-              <TableRow key={applicant.id}>
-                <TableCell>
-                  <CheckboxField
-                    label=""
-                    checked={selectedApplicants.has(applicant.id)}
-                    onChange={() => toggleApplicantSelection(applicant.id)}
-                    name={`select-${applicant.id}`}
+        <div className="bg-white rounded-lg shadow-card border border-gray-200 overflow-hidden">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <input
+                    type="checkbox"
+                    checked={selectedApplicants.size === filteredApplicants.length && filteredApplicants.length > 0}
+                    onChange={toggleSelectAll}
+                    className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
                   />
-                </TableCell>
-                <TableCell>
-                  <Link 
-                    href={`/jobs/${params.id}/applicants/${applicant.id}`}
-                    style={{ textDecoration: 'none', color: 'inherit' }}
-                  >
-                    <Text fontWeight="semibold" color="blue.600">
-                      {applicant.applicantName || "N/A"}
-                    </Text>
-                  </Link>
-                </TableCell>
-                <TableCell>
-                  <Text fontSize="0.875rem">
-                    {applicant.applicantEmail || "N/A"}
-                  </Text>
-                </TableCell>
-                <TableCell>
-                  <Text fontSize="0.875rem">
-                    {formatDate(applicant.appliedAt)}
-                  </Text>
-                </TableCell>
-                <TableCell>
-                  <Badge variation={getStatusBadgeVariation(applicant.status as ApplicationStatus)}>
-                    {applicant.status?.replace('_', ' ') || "NEW"}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  {applicant.resumeURL ? (
-                    <Button
-                      size="small"
-                      variation="link"
-                      as="a"
-                      href={applicant.resumeURL}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Name
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Email
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Applied Date
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Status
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Resume
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {filteredApplicants.map((applicant) => (
+                <tr key={applicant.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <input
+                      type="checkbox"
+                      checked={selectedApplicants.has(applicant.id)}
+                      onChange={() => toggleApplicantSelection(applicant.id)}
+                      className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                    />
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <Link 
+                      href={`/jobs/${params.id}/applicants/${applicant.id}`}
+                      style={{ textDecoration: 'none', color: 'inherit' }}
                     >
-                      Download
-                    </Button>
-                  ) : (
-                    <Text fontSize="0.875rem" color="gray.500">No resume</Text>
-                  )}
-                </TableCell>
-                <TableCell>
-                  <SelectField
-                    label=""
-                    value={applicant.status || "NEW"}
-                    onChange={(e) => updateApplicantStatus(applicant.id, e.target.value as ApplicationStatus)}
-                    size="small"
-                  >
-                    <option value="NEW">New</option>
-                    <option value="IN_REVIEW">In Review</option>
-                    <option value="HIRED">Hired</option>
-                    <option value="REJECTED">Rejected</option>
-                  </SelectField>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+                      <span className="font-semibold text-primary hover:text-primary-600 transition-colors duration-150">
+                        {applicant.applicantName || "N/A"}
+                      </span>
+                    </Link>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className="text-sm text-gray-800">
+                      {applicant.applicantEmail || "N/A"}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className="text-sm text-gray-800">
+                      {formatDate(applicant.appliedAt)}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {getStatusBadge(applicant.status as ApplicationStatus)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {applicant.resumeURL ? (
+                      <a
+                        className="text-primary hover:text-primary-600 text-sm font-medium transition-colors duration-150"
+                        href={applicant.resumeURL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Download
+                      </a>
+                    ) : (
+                      <span className="text-sm text-gray-500">No resume</span>
+                    )}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <select
+                      value={applicant.status || "NEW"}
+                      onChange={(e) => updateApplicantStatus(applicant.id, e.target.value as ApplicationStatus)}
+                      className="text-sm px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                    >
+                      <option value="NEW">New</option>
+                      <option value="IN_REVIEW">In Review</option>
+                      <option value="HIRED">Hired</option>
+                      <option value="REJECTED">Rejected</option>
+                    </select>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
-    </View>
+    </div>
   );
 }
